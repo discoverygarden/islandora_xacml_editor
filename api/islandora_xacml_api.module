@@ -53,17 +53,17 @@ function islandora_xacml_api_settings() {
     '#type' => 'checkbox',
     '#title' => t('Save relationships'),
     '#description' => t('Causes relationships to be written to the REL-INT/EXT when the policy is saved.'),
-    '#default_value' => variable_get('islandora_xacml_api_save_relationships', TRUE),
+    '#default_value' => \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships'),
   );
   $form['islandora_xacml_api_rels_viewable_role'] = array(
     '#type' => 'textfield',
     '#title' => t('Solr RELS-EXT ViewableByRole field'),
-    '#default_value' => variable_get('islandora_xacml_api_rels_viewable_role', 'RELS_EXT_isViewableByRole_literal_ms'),
+    '#default_value' => \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role'),
   );
   $form['islandora_xacml_api_rels_viewable_user'] = array(
     '#type' => 'textfield',
     '#title' => t('Solr RELS-EXT ViewableByUser field'),
-    '#default_value' => variable_get('islandora_xacml_api_rels_viewable_user', 'RELS_EXT_isViewableByUser_literal_ms'),
+    '#default_value' => \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user'),
   );
 
   return system_settings_form($form);
@@ -76,7 +76,7 @@ function islandora_xacml_api_settings() {
  *   The Solr query processor to apply XACML rules to.
  */
 function islandora_xacml_api_islandora_solr_query($islandora_solr_query) {
-  global $user;
+  $user = \Drupal::currentUser();
 
   if ($user->uid != 0) {
     $user_name = $user->name;
@@ -85,14 +85,14 @@ function islandora_xacml_api_islandora_solr_query($islandora_solr_query) {
     $user_name = 'anonymous';
   }
 
-  $fq = variable_get('islandora_xacml_api_rels_viewable_user', 'RELS_EXT_isViewableByUser_literal_ms') . ":\"" . $user_name . "\" OR ";
+  $fq = \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user') . ":\"" . $user_name . "\" OR ";
 
   // Check if any of my roles are allowed.
   foreach ($user->roles as $role) {
-    $fq .= variable_get('islandora_xacml_api_rels_viewable_role', 'RELS_EXT_isViewableByRole_literal_ms') . ":\"" . $role . "\" OR ";
+    $fq .= \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role') . ":\"" . $role . "\" OR ";
   }
   // Check if the object is open (unrestricted).
-  $fq .= "((*:* -" . variable_get('islandora_xacml_api_rels_viewable_user', 'RELS_EXT_isViewableByUser_literal_ms') . ":[* TO *]) AND (*:* -" . variable_get('islandora_xacml_api_rels_viewable_role', 'RELS_EXT_isViewableByRole_literal_ms') . ":[* TO *]))";
+  $fq .= "((*:* -" . \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user') . ":[* TO *]) AND (*:* -" . \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role') . ":[* TO *]))";
   $islandora_solr_query->solrParams['fq'][] = $fq;
 }
 
@@ -205,7 +205,7 @@ function islandora_xacml_api_islandora_basic_collection_get_query_optionals($typ
  * Implements hook_islandora_basic_collection_query_get_query_filters().
  */
 function islandora_xacml_api_islandora_basic_collection_get_query_filters() {
-  global $user;
+  $user = \Drupal::currentUser();
   if ($user->uid === 0) {
     $user_name = 'anonymous';
   }

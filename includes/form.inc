@@ -43,7 +43,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
   }
 
   // Current user.
-  $form_state['islandora_xacml']['current_user'] = $GLOBALS['user']->name;
+  $form_state['islandora_xacml']['current_user'] = \Drupal::currentUser()->name;
 
   // Get role list.
   $roles = array();
@@ -202,7 +202,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
   // Call CModel oriented variants first.
   $query_choices = array();
   foreach (islandora_build_hook_list('islandora_xacml_editor_child_query', $object->models) as $hook) {
-    $temp = module_invoke_all($hook, $object);
+    $temp = \Drupal::moduleHandler()->invokeAll($hook, [$object]);
     if (!empty($temp)) {
       $query_choices = array_merge_recursive($query_choices, $temp);
       // We are doing this to handle the "flat" use case where we are not
@@ -280,7 +280,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
       $add_text = trim($form_state['input']['dsid_add_textfield']);
 
       if (!empty($add_text) && !ctype_space($add_text)) {
-        $restricted_dsids = variable_get('islandora_xacml_editor_restricted_dsids', '');
+        $restricted_dsids = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
         $restricted_dsids = preg_split('/[\s,]+/', $restricted_dsids);
 
         if (!(isset($form_state['islandora_xacml']['add_dsid']) && in_array($add_text, $form_state['islandora_xacml']['add_dsid'])) &&
@@ -366,7 +366,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
 
       $add_text = $form_state['input']['mime_add_textfield'];
       if (!empty($add_text) && !ctype_space($add_text)) {
-        $restricted_mimes = variable_get('islandora_xacml_editor_restricted_mimes', '');
+        $restricted_mimes = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
         $restricted_mimes = preg_split('/[\s,]+/', $restricted_mimes);
 
         if (!(isset($form_state['islandora_xacml']['add_mime']) && in_array($add_text, $form_state['islandora_xacml']['add_mime'])) &&
@@ -397,7 +397,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
       $remove_count = 0;
 
       foreach ($form_state['islandora_xacml']['rows'] as $key => $value) {
-        $type = drupal_strtolower($value['Type']);
+        $type = \Drupal\Component\Utility\Unicode::strtolower($value['Type']);
         $filter = $value['Filter'];
 
         if ($type == 'dsid') {
@@ -415,7 +415,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
         $remove_count++;
       }
 
-      $remove_output = format_plural($remove_count, '!filter_count applied filter was removed.',
+      $remove_output = \Drupal::translation()->formatPlural($remove_count, '!filter_count applied filter was removed.',
               '!filter_count applied filters were removed.', array('!filter_count' => $remove_count));
       drupal_set_message($remove_output);
     }
@@ -448,7 +448,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
           }
           $remove_count++;
         }
-        $remove_output = format_plural($remove_count, '!filter_count applied filter was removed.',
+        $remove_output = \Drupal::translation()->formatPlural($remove_count, '!filter_count applied filter was removed.',
               '!filter_count applied filters were removed.', array('!filter_count' => $remove_count));
         drupal_set_message($remove_output);
       }
@@ -795,7 +795,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
     ),
   );
 
-  if (variable_get('islandora_xacml_editor_show_dsidregex', 1)) {
+  if (\Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex')) {
     $form['dsid_mime']['dsid_regex'] = array(
       '#type' => 'textfield',
       '#title' => t('DSID Regex'),
@@ -849,7 +849,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
     ),
   );
 
-  if (variable_get('islandora_xacml_editor_show_mimeregex', 1)) {
+  if (\Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex')) {
     $form['dsid_mime']['mime_regex'] = array(
       '#type' => 'textfield',
       '#title' => t('MIME type Regex'),
@@ -912,11 +912,11 @@ function islandora_xacml_editor_retrieve_users($xacml, $new_xacml, $rule) {
       return $xacml->managementRule->getUsers();
     }
     else {
-      return variable_get('islandora_xacml_editor_default_users', 'admin');
+      return \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_users');
     }
   }
   else {
-    return variable_get('islandora_xacml_editor_default_users', 'admin');
+    return \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_users');
   }
 }
 
@@ -947,11 +947,11 @@ function islandora_xacml_editor_retrieve_roles($xacml, $new_xacml, $rule) {
       return $xacml->managementRule->getRoles();
     }
     else {
-      return variable_get('islandora_xacml_editor_default_roles', 'administrator');
+      return \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_roles');
     }
   }
   else {
-    return variable_get('islandora_xacml_editor_default_roles', 'administrator');
+    return \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_roles');
   }
 }
 
@@ -1129,13 +1129,13 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
   $table = $variables['table'];
   $row_elements = $table['rows'];
   $rows = array();
-  foreach (element_children($row_elements) as $key) {
+  foreach (\Drupal\Core\Render\Element::children($row_elements) as $key) {
     $columns = array();
     $row_element = $row_elements[$key];
-    foreach (element_children($row_element) as $key) {
+    foreach (\Drupal\Core\Render\Element::children($row_element) as $key) {
       $column_element = $row_element[$key];
       $columns[] = array(
-        'data' => drupal_render($column_element),
+        'data' => \Drupal::service("renderer")->render($column_element),
         'class' => isset($cell_element['#attributes']['class']) ? $column_element['#attributes']['class'] : NULL,
       );
     }

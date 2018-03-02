@@ -14,12 +14,12 @@ function islandora_xacml_editor_settings() {
   $form['islandora_xacml_editor_show_dsidregex'] = array(
     '#type' => 'checkbox',
     '#title' => t('Display the DSID regex textfield?'),
-    '#default_value' => variable_get('islandora_xacml_editor_show_dsidregex', 1),
+    '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex'),
   );
   $form['islandora_xacml_editor_show_mimeregex'] = array(
     '#type' => 'checkbox',
     '#title' => t('Display the MIME type regex textfield?'),
-    '#default_value' => variable_get('islandora_xacml_editor_show_mimeregex', 1),
+    '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex'),
   );
   $form['islandora_xacml_editor_restrictions'] = array(
     '#type' => 'fieldset',
@@ -31,12 +31,12 @@ function islandora_xacml_editor_settings() {
   $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_dsids'] = array(
     '#type' => 'textarea',
     '#title' => t('DSID'),
-    '#default_value' => variable_get('islandora_xacml_editor_restricted_dsids', ''),
+    '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids'),
   );
   $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_mimes'] = array(
     '#type' => 'textarea',
     '#title' => t('MIME type'),
-    '#default_value' => variable_get('islandora_xacml_editor_restricted_mimes', ''),
+    '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes'),
   );
   $form['islandora_xacml_editor_defaults'] = array(
     '#type' => 'fieldset',
@@ -68,7 +68,7 @@ function islandora_xacml_editor_settings() {
     '#type' => 'select',
     '#title' => t('Users'),
     '#options' => $users,
-    '#default_value' => variable_get('islandora_xacml_editor_default_users', 'admin'),
+    '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_users'),
     '#multiple' => TRUE,
     '#size' => 10,
     '#prefix' => '<div class="islandora_xacml_selects">',
@@ -76,7 +76,7 @@ function islandora_xacml_editor_settings() {
   $form['islandora_xacml_editor_defaults']['islandora_xacml_editor_default_roles'] = array(
     '#type' => 'select',
     '#title' => t('Roles'),
-    '#default_value' => variable_get('islandora_xacml_editor_default_roles', 'administrator'),
+    '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_roles'),
     '#options' => $roles,
     '#multiple' => TRUE,
     '#size' => 10,

@@ -103,7 +103,7 @@ EOQ;
  * @see https://jira.duraspace.org/browse/ISLANDORA-1183
  */
 function islandora_xacml_api_update_7102(&$sandbox) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     return t('Relationships are disabled, nothing to do.');
   }
 
@@ -117,7 +117,7 @@ function islandora_xacml_api_update_7102(&$sandbox) {
  * @see https://jira.duraspace.org/browse/ISLANDORA-1273
  */
 function islandora_xacml_api_update_7103(&$sandbox) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     return t('Relationships are disabled, nothing to do.');
   }
   drupal_load('module', 'islandora');
@@ -206,7 +206,7 @@ EOQ;
  * @see https://jira.duraspace.org/browse/ISLANDORA-1273
  */
 function islandora_xacml_api_update_7104(&$sandbox) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     return t('Relationships are disabled, nothing to do.');
   }
   drupal_load('module', 'islandora');
@@ -298,7 +298,7 @@ EOQ;
  * @see https://jira.duraspace.org/browse/ISLANDORA-1273
  */
 function islandora_xacml_api_update_7105(&$sandbox) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     return t('Relationships are disabled, nothing to do.');
   }
   drupal_load('module', 'islandora');
@@ -399,7 +399,7 @@ EOQ;
  * @see https://jira.duraspace.org/browse/ISLANDORA-2067
  */
 function islandora_xacml_api_update_7106(&$sandbox) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     return t('Relationships are disabled, if they were previously enabled it may be prudent to temporarily re-enable and run the isalndora-xacml-api-relationships-missing-rels-int-batch command to ensure consistency.');
   }
   drupal_set_message(t('Please run the islandora-xacml-api-relationships-missing-rels-int-batch drush command.'));

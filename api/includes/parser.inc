@@ -110,7 +110,7 @@ class XacmlParser {
       $method = $value->nodeValue;
 
       if (preg_match('/api-a/', $method) || preg_match('/api-m/', $method)) {
-        $rule['methods'][] = drupal_substr($method, 35);
+        $rule['methods'][] = \Drupal\Component\Utility\Unicode::substr($method, 35);
       }
       else {
         // Methods are returned as they are represented in XACML
@@ -118,7 +118,7 @@ class XacmlParser {
         // urn:fedora:names:fedora:2.1:action:id-getDatastreamDissemination
         // Here we split off the first 38 characters, which for this example
         // would give us: getDatastreamDissemination.
-        $rule['methods'][] = drupal_substr($method, 38);
+        $rule['methods'][] = \Drupal\Component\Utility\Unicode::substr($method, 38);
       }
     }
   }

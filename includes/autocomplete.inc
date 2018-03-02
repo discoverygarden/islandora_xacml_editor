@@ -13,15 +13,15 @@ function islandora_xacml_editor_dsid_autocomplete($pid, $string) {
 
   foreach ($object as $datastream) {
     if ($string != '*') {
-      if (strpos(drupal_strtoupper($datastream->id), drupal_strtoupper($string)) !== FALSE) {
-        $output[$datastream->id] = check_plain($datastream->id);
+      if (strpos(\Drupal\Component\Utility\Unicode::strtoupper($datastream->id), \Drupal\Component\Utility\Unicode::strtoupper($string)) !== FALSE) {
+        $output[$datastream->id] = \Drupal\Component\Utility\Html::escape($datastream->id);
       }
     }
     else {
-      $output[$datastream->id] = check_plain($datastream->id);
+      $output[$datastream->id] = \Drupal\Component\Utility\Html::escape($datastream->id);
     }
   }
-  $restricted_dsids = variable_get('islandora_xacml_editor_restricted_dsids', '');
+  $restricted_dsids = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
   $restricted_dsids = preg_split('/[\s,]+/', $restricted_dsids);
 
   $output = array_diff($output, $restricted_dsids);
@@ -48,15 +48,15 @@ function islandora_xacml_editor_mime_autocomplete($pid, $string) {
   }
   foreach ($mime as $key => $value) {
     if ($string != "*") {
-      if (strpos(drupal_strtoupper($key), drupal_strtoupper($string)) !== FALSE) {
-        $output[$key] = check_plain($key);
+      if (strpos(\Drupal\Component\Utility\Unicode::strtoupper($key), \Drupal\Component\Utility\Unicode::strtoupper($string)) !== FALSE) {
+        $output[$key] = \Drupal\Component\Utility\Html::escape($key);
       }
     }
     else {
-      $output[$key] = check_plain($key);
+      $output[$key] = \Drupal\Component\Utility\Html::escape($key);
     }
   }
-  $restricted_mimes = variable_get('islandora_xacml_editor_restricted_mimes', '');
+  $restricted_mimes = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
   $restricted_mimes = preg_split('/[\s,]+/', $restricted_mimes);
 
   $output = array_diff($output, $restricted_mimes);

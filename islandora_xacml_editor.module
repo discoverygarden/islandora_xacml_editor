@@ -230,7 +230,7 @@ function islandora_xacml_editor_islandora_basic_collection_build_manage_object(a
     '#access' => user_access(ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION),
     '#type' => 'fieldset',
     '#title' => t('Manage XACML Inheritance'),
-    'form' => drupal_get_form('islandora_xacml_editor_manage_xacml_form', $object),
+    'form' => \Drupal::formBuilder()->getForm('islandora_xacml_editor_manage_xacml_form', $object),
   );
   $form_state['manage_collection_object']['manage_xacml']['form']['#submit'][] = 'islandora_xacml_editor_manage_xacml_form_submit';
   return $form_state;
@@ -303,7 +303,7 @@ function islandora_xacml_editor_after_build($form, &$form_state) {
  *   The Drupal form definition.
  */
 function islandora_xacml_editor_manage_xacml_form(array $form, array &$form_state, AbstractObject $object) {
-  if (module_exists('islandora_basic_collection')) {
+  if (\Drupal::moduleHandler()->moduleExists('islandora_basic_collection')) {
     module_load_include('inc', 'islandora', 'includes/utilities');
     // Hard code the XACML pager element because it needs to be unique.
     $pager_element = 3;

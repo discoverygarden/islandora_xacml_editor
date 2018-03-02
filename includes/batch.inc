@@ -59,7 +59,7 @@ function islandora_xacml_editor_batch_function($xml, $pid, $query_array, &$conte
  */
 function islandora_xacml_editor_batch_finished($success, $results, $operations) {
   if ($success) {
-    $message = format_plural(count($results['success']), 'One policy updated.', '@count policies updated.');
+    $message = \Drupal::translation()->formatPlural(count($results['success']), 'One policy updated.', '@count policies updated.');
   }
   else {
     $message = t('Finished with an error.');
@@ -101,7 +101,7 @@ class IslandoraUpdatePolicy {
    *   The success of the operation.
    */
   public function updatePolicy() {
-    global $user;
+    $user = \Drupal::currentUser();
     $success = FALSE;
     if (isset($this->object)) {
       try {
@@ -187,7 +187,7 @@ class IslandoraXacmlEditorQuery {
         if ($result_object) {
           $object_models = array_diff($result_object->models, $restricted_cmodels);
           foreach (islandora_build_hook_list('islandora_xacml_editor_child_query', $object_models) as $hook) {
-            $query_implementations = module_invoke_all($hook, $result_object);
+            $query_implementations = \Drupal::moduleHandler()->invokeAll($hook, [$result_object]);
             if (!empty($query_implementations)) {
               foreach ($query_implementations as $query_choice) {
                 $this->query($query_choice, $result['object']['value']);

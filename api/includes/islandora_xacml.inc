@@ -42,7 +42,7 @@ class IslandoraXacml extends Xacml {
    */
   public function writeBackToFedora() {
     // Only add relationships on POLICY datastream.
-    if (variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+    if (\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
       $this->writeRelations();
     }
 

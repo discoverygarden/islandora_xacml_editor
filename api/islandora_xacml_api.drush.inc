@@ -77,7 +77,7 @@ function drush_islandora_xacml_api_relationships_update_batch() {
  * Batch operation; update a PID.
  */
 function islandora_xacml_api_relationships_update_batch_operation($limit, &$context) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     drush_log(t('Relationships are disabled, nothing to do.'));
   }
   $sandbox =& $context['sandbox'];
@@ -183,7 +183,7 @@ function drush_islandora_xacml_api_relationships_missing_rels_int_batch() {
  * Batch operation; identify and update a PID.
  */
 function islandora_xacml_api_relationships_missing_rels_int_update_batch_operation($limit, $commit, &$context) {
-  if (!variable_get('islandora_xacml_api_save_relationships', TRUE)) {
+  if (!\Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships')) {
     drush_log(t('Relationships are disabled, nothing to do.'));
   }
   $sandbox =& $context['sandbox'];
