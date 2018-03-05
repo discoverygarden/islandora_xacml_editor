@@ -21,13 +21,17 @@ abstract class XacmlRule {
   /**
    * Private internal representation of the XACML rule.
    *
-   * @var array containing rules that can be parsed by XacmlWriter
+   * Containing rules that can be parsed by XacmlWriter
    * and XacmlParser.
+   *
+   * @var array
    */
   protected $rule;
 
   /**
-   * This points to the Xacml object that this rule is instantiated inside of,
+   * The XACML object.
+   *
+   * This points to the XACML object that this rule is instantiated inside of,
    * so that references to other rules can be made.
    *
    * @var Xacml
@@ -81,10 +85,10 @@ abstract class XacmlRule {
   }
 
   /**
-   * Helper function. Internal arrays may have repeated values,  fixes this.
+   * Helper function. Internal arrays may have repeated values, fixes this.
    *
    * @param string $type
-   *   Array key in internal datastructure to return
+   *   Array key in internal datastructure to return.
    *
    * @return array
    *   Array requested.
@@ -99,7 +103,7 @@ abstract class XacmlRule {
    * @todo This could all be made more efficient.
    *
    * @param string $type
-   *   Array key to work on
+   *   Array key to work on.
    * @param mixed $data
    *   Data to be removed.
    */
@@ -114,19 +118,19 @@ abstract class XacmlRule {
   /**
    * Constructs new XacmlRule.
    *
+   * @param array $arg1
+   *   An array containing an pre-exisitng XACML rule or NULL.
+   * @param Xacml $xacml
+   *   A reference to the XACML dobject that this datastructure is part of.
+   *
    * @note
    *   This generic constructor does not set any methods. It assumes if arg1 is
    *   an array that array is an existing XACML rule datastructure. Concrete
    *   implementations should call parent::__construct then initialize the
    *   datastructure correctly if arg1 is NULL by calling
    *   parent::initializeRule() with the proper methods.
-   *
-   * @param array $arg1
-   *   An array containing an pre-exisitng XACML rule or NULL.
-   * @param Xacml $xacml
-   *   A reference to the XACML dobject that this datastructure is part of.
    */
-  public function __construct($arg1, $xacml) {
+  public function __construct(array $arg1, Xacml $xacml) {
     if (is_array($arg1)) {
       $this->rule = $arg1;
       /* remove them now, add them later */
@@ -187,7 +191,7 @@ abstract class XacmlRule {
    * @param bool $default
    *   The default value to return.
    */
-  protected function internalHasPermission($user, $roles = NULL, $default = TRUE) {
+  protected function internalHasPermission($user, array $roles = NULL, $default = TRUE) {
     // We always allow the administrator role.
     if (in_array('administrator', $roles)) {
       return TRUE;
@@ -389,7 +393,7 @@ class XacmlViewingRule extends XacmlRule {
    * @param Xacml $xacml
    *   Reference to the parent XACML object.
    */
-  public function __construct($arg1, $xacml) {
+  public function __construct($arg1, Xacml $xacml) {
     parent::__construct($arg1, $xacml);
     $methods_default = [
       'api-a',
@@ -458,7 +462,7 @@ class XacmlPermitEverythingRule extends XacmlRule {
    * @param Xacml $xacml
    *   A reference to a Xacml object.
    */
-  public function __construct($xacml) {
+  public function __construct(Xacml $xacml) {
     parent::__construct(NULL, $xacml);
     $this->rule = $this->initializeRule(ISLANDORA_XACML_API_PERMIT_RULE, 'Permit');
   }
@@ -684,9 +688,9 @@ class XacmlDatastreamRule extends XacmlRule {
    * @param mixed $roles
    *   An array of strings containing the roles being tested. Or NULL.
    * @param string $mime
-   *   String containing the mime
+   *   String containing the mime.
    * @param string $dsid
-   *   String containing the DSID
+   *   String containing the DSID.
    *
    * @return bool
    *   Whether the user has permission or not.
@@ -739,14 +743,15 @@ class XacmlDatastreamRule extends XacmlRule {
     return TRUE;
   }
 
-
 }
 
 /**
- * This class is how programmers should interact with Xacml objects. It takes
- * either XACML XML as a string or no arguements and creates a blank XACML
- * object. The interaction with the rules takes place through member object of
- * this class. For instance to add roles that can manage the object:
+ * This class is how programmers should interact with Xacml objects.
+ *
+ * It takes either XACML XML as a string or no arguements and creates a blank
+ * XACML object. The interaction with the rules takes place through member
+ * object of this class. For instance to add roles that can manage the object:
+ *
  * @code
  *   xacml = new Xacml()
  *   // allow userA to manage the object
@@ -755,32 +760,37 @@ class XacmlDatastreamRule extends XacmlRule {
  *   xacml->managementRule->addRole(array('roleC', 'roleD'))
  * @endcode
  */
+// @codingStandardsIgnoreLine
 class Xacml {
 
   /**
    * The $xacml datastructure parsable by XacmlWriter and XacmlParser.
+   *
    * @var array
    */
   protected $xacml;
   /**
    * Rule to allow anything. Users shouldn't need to interact with this.
+   *
    * @var XacmlPermitEverythingRule
    */
   protected $permitEverythingRule;
 
   /**
    * Rule controling who can manage the object with this XACML policy.
+   *
    * @var XacmlManagementRule
    */
   public $managementRule;
   /**
-   * Rule controlling who can view the specific datastreams and mimetypes that
-   * are in this rule.
+   * Rule controlling who can view specific datastreams and mimetypes.
+   *
    * @var XacmlDatastreamRule
    */
   public $datastreamRule;
   /**
    * Rule controlling who can view datastreams in this object.
+   *
    * @var XacmlViewingRule
    */
   public $viewingRule;

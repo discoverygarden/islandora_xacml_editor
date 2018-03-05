@@ -4,18 +4,31 @@
  * @file
  * Subclass Xacml to facilitate communication to Islandora/Fedora.
  *
- * Need to have Drupal bootstrapped, due to use of module_load_includes
+ * Need to have Drupal bootstrapped, due to use of module_load_includes.
  */
 
+/**
+ * Subclass Xacml to facilitate communication to Islandora/Fedora.
+ */
+// @codingStandardsIgnoreLine
 class IslandoraXacml extends Xacml {
   /**
-   * The idenitfy the datastream from which this policy was obtained (and to
+   * The object of the POLICY.
+   *
+   * The object from which this policy was obtained (and to
    * which it should be written back to).
    *
-   * @var $object
-   * @var $pid
+   * @var string
    */
   protected $object;
+  /**
+   * The PID of the POLICY.
+   *
+   * The PID of the object from which this policy was obtained (and to
+   * which it should be written back to).
+   *
+   * @var string
+   */
   protected $pid;
 
   /**
@@ -27,7 +40,7 @@ class IslandoraXacml extends Xacml {
    *   A string containing XACML XML, or NULL to attempt to load from the given
    *   PID and DSID.
    */
-  public function __construct($object, $xacml = NULL) {
+  public function __construct(AbstractObject $object, $xacml = NULL) {
     if ($xacml === NULL && isset($object['POLICY'])) {
       $xacml = $object['POLICY']->content;
     }
