@@ -18,7 +18,7 @@ const ISLANDORA_XACML_API_PERMIT_RULE = 'allow-everything-else';
  * @param IslandoraSolrQueryProcessor $islandora_solr_query
  *   The Solr query processor to apply XACML rules to.
  */
-function islandora_xacml_api_islandora_solr_query($islandora_solr_query) {
+function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $islandora_solr_query) {
   $user = \Drupal::currentUser();
 
   if ($user->uid != 0) {
@@ -88,8 +88,6 @@ function islandora_xacml_api_islandora_datastream_ingested(AbstractObject $objec
     if (array_search($datastream->id, $ds_rule['dsids']) !== FALSE) {
       $viewable_by_user = 'isViewableByUser';
       $viewable_by_role = 'isViewableByRole';
-      $manageable_by_user = 'isManageableByUser';
-      $manageable_by_role = 'isManageableByRole';
       if (count($ds_rule['users']) > 0) {
         foreach ($ds_rule['users'] as $user) {
           // The XACML API adds fedoraAdmin to the list of users as to prevent
@@ -116,30 +114,30 @@ function islandora_xacml_api_islandora_datastream_ingested(AbstractObject $objec
 function islandora_xacml_api_islandora_basic_collection_get_query_optionals($type) {
   switch ($type) {
     case 'manage':
-      $to_return = array(
-        format_string('?object <!uri!pred> ?role', array(
+      $to_return = [
+        format_string('?object <!uri!pred> ?role', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isManagableByRole',
-        )),
-        format_string('?object <!uri!pred> ?user', array(
+        ]),
+        format_string('?object <!uri!pred> ?user', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isManagableByUser',
-        )),
-      );
+        ]),
+      ];
       return $to_return;
 
     case 'view':
     default:
-      $to_return = array(
-        format_string('?object <!uri!pred> ?role', array(
+      $to_return = [
+        format_string('?object <!uri!pred> ?role', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isViewableByRole',
-        )),
-        format_string('?object <!uri!pred> ?user', array(
+        ]),
+        format_string('?object <!uri!pred> ?user', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isViewableByUser',
-        )),
-      );
+        ]),
+      ];
       return $to_return;
   }
 }
@@ -156,7 +154,7 @@ function islandora_xacml_api_islandora_basic_collection_get_query_filters() {
     $user_name = $user->name;
   }
 
-  $role_matches = array();
+  $role_matches = [];
   foreach ($user->roles as $role) {
     $role_matches[] = "?role='{$role}'";
   }
@@ -169,14 +167,14 @@ function islandora_xacml_api_islandora_basic_collection_get_query_filters() {
  * Implements hook_islandora_object_access().
  */
 function islandora_xacml_api_islandora_object_access($op, $object, $user) {
-  $management_operations = array(
+  $management_operations = [
     ISLANDORA_MANAGE_PROPERTIES,
     ISLANDORA_METADATA_EDIT,
     ISLANDORA_ADD_DS,
     ISLANDORA_PURGE,
     ISLANDORA_INGEST,
     ISLANDORA_REVERT_DATASTREAM,
-  );
+  ];
 
   // XXX: Is it necessary to address the case when POLICY is not readable?...
   // ... really, we should never get to this point if the POLICY isn't
@@ -210,12 +208,12 @@ function islandora_xacml_api_islandora_datastream_access($op, $datastream, $user
 
     $xacml = new IslandoraXacml($datastream->parent);
 
-    $check_ops = array(
+    $check_ops = [
       ISLANDORA_VIEW_OBJECTS,
       ISLANDORA_METADATA_EDIT,
       ISLANDORA_PURGE,
       ISLANDORA_REVERT_DATASTREAM,
-    );
+    ];
     if (in_array($op, $check_ops)) {
       $object_results = islandora_xacml_api_islandora_object_access(
           $op, $datastream->parent, $user
@@ -264,11 +262,11 @@ WHERE {
 EOQ;
   $children = $object->repository->ri->sparqlQuery($query);
   if (count($children) > 0 && $object['POLICY']) {
-    $query_array = array(
+    $query_array = [
       'type' => 'sparql',
       'query' => $query,
       'description' => t('Applies policy to existing objects.'),
-    );
+    ];
     $xml = $object['POLICY']->content;
     $pid = $object->id;
     $batch = array(

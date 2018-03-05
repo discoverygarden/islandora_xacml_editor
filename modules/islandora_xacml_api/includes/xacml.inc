@@ -308,26 +308,28 @@ abstract class XacmlRule {
     }
     return $return;
   }
+
 }
 
 /**
  * Concrete implementation for the rule restricting who can manage an object.
  */
+// @codingStandardsIgnoreLine
 class XacmlManagementRule extends XacmlRule {
 
   /**
    * Calls the parent constructor.
-   *
-   * @note
-   *  If $arg1 is NULL instantiates the rule as a new blank rule.
    *
    * @param mixed $arg1
    *   Existing Rule datastructure with ID ISLANDORA_XACML_API_MANAGEMENT_RULE
    *   or NULL.
    * @param Xacml $xacml
    *   Reference to the parent XACML object.
+   *
+   * @note
+   *  If $arg1 is NULL instantiates the rule as a new blank rule.
    */
-  public function __construct($arg1, $xacml) {
+  public function __construct($arg1, Xacml $xacml) {
     parent::__construct($arg1, $xacml);
     $methods_default = [
       'addDatastream',
@@ -374,24 +376,26 @@ class XacmlManagementRule extends XacmlRule {
     // policy.
     return parent::internalHasPermission($user, $roles, FALSE);
   }
+
 }
 
 /**
  * Concrete implementation for the rule restricting who can view an object.
  */
+// @codingStandardsIgnoreLine
 class XacmlViewingRule extends XacmlRule {
 
   /**
    * This calls the parent constructor.
-   *
-   * @note
-   *   If $arg1 is NULL instantiates the rule as a new blank rule.
    *
    * @param mixed $arg1
    *   Existing Rule datastructure with ID ISLANDORA_XACML_API_VIEWING_RULE or
    *   NULL.
    * @param Xacml $xacml
    *   Reference to the parent XACML object.
+   *
+   * @note
+   *   If $arg1 is NULL instantiates the rule as a new blank rule.
    */
   public function __construct($arg1, Xacml $xacml) {
     parent::__construct($arg1, $xacml);
@@ -443,6 +447,7 @@ class XacmlViewingRule extends XacmlRule {
   public function hasPermission($user, $roles = NULL) {
     return parent::internalHasPermission($user, $roles);
   }
+
 }
 
 /**
@@ -455,7 +460,9 @@ class XacmlViewingRule extends XacmlRule {
  * This is entirely managed by Xacml object so not much needs to be said about
  * it.
  */
+// @codingStandardsIgnoreLine
 class XacmlPermitEverythingRule extends XacmlRule {
+
   /**
    * Calls the parent constructor.
    *
@@ -491,11 +498,13 @@ class XacmlPermitEverythingRule extends XacmlRule {
     // policy.
     return parent::internalHasPermission($user, $roles);
   }
+
 }
 
 /**
  * A concrete implementation to restrict certain mimetypes and datastreams.
  */
+// @codingStandardsIgnoreLine
 class XacmlDatastreamRule extends XacmlRule {
 
   /**
@@ -507,7 +516,7 @@ class XacmlDatastreamRule extends XacmlRule {
    * @param Xacml $xacml
    *   Reference to parent Xacml object.
    */
-  public function __construct($arg1, $xacml) {
+  public function __construct($arg1, Xacml $xacml) {
     parent::__construct($arg1, $xacml);
     $methods_default = [
       'getDatastreamDissemination',
@@ -710,7 +719,7 @@ class XacmlDatastreamRule extends XacmlRule {
       $mimeregexs = $this->getMimetypeRegexs();
 
       if (isset($mimeregexs)) {
-        foreach ($mimeregexs as $key => $value) {
+        foreach ($mimeregexs as $value) {
           preg_match('/' . $value . '/', $mime, $match);
 
           if (count($match) > 0) {
@@ -723,7 +732,7 @@ class XacmlDatastreamRule extends XacmlRule {
       $dsidregexs = $this->getDsidRegexs();
 
       if (isset($dsidregexs)) {
-        foreach ($dsidregexs as $key => $value) {
+        foreach ($dsidregexs as $value) {
           preg_match('/' . $value . '/', $dsid, $match);
 
           if (count($match) > 0) {
