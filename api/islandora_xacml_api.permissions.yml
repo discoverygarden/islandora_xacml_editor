@@ -1,0 +1,3 @@
+'administer islandora_xacml_api':
+  title: 'XACML API'
+  description: 'Manage XACML API settings.'

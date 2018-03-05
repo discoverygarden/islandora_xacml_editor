@@ -9,20 +9,6 @@
 define('ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION', 'administer xacml inheritance');
 
 /**
- * Implements hook_permission().
- */
-function islandora_xacml_editor_permission() {
-  return array(
-    'administer islandora_xacml_editor' => array(
-      'title' => 'Edit XACML Policies',
-    ),
-    ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION => array(
-      'title' => 'Edit XACML Inheritance',
-    ),
-  );
-}
-
-/**
  * Implements hook_theme().
  */
 function islandora_xacml_editor_theme($existing, $type, $theme, $path) {
