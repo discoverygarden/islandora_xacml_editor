@@ -13,54 +13,6 @@ const ISLANDORA_XACML_API_PERMIT_RULE = 'allow-everything-else';
 // @codingStandardsIgnoreEnd
 
 /**
- * Implements hook_menu().
- */
-function islandora_xacml_api_menu() {
-  $items = array();
-  $items['admin/islandora/tools/xacml'] = array(
-    'title' => 'Islandora XACML',
-    'description' => 'Settings for the Islandora XACML modules.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('islandora_xacml_api_settings'),
-    'access arguments' => array('administer islandora_xacml_api'),
-  );
-
-  $items['admin/islandora/tools/xacml/api'] = array(
-    'title' => 'Islandora XACML API',
-    'description' => 'Settings for the Islandora XACML API module.',
-    'access arguments' => array('administer islandora_xacml_api'),
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => 0,
-  );
-
-  return $items;
-}
-
-/**
- * Admin settings form.
- */
-function islandora_xacml_api_settings() {
-  $form['islandora_xacml_api_save_relationships'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Save relationships'),
-    '#description' => t('Causes relationships to be written to the REL-INT/EXT when the policy is saved.'),
-    '#default_value' => \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_save_relationships'),
-  );
-  $form['islandora_xacml_api_rels_viewable_role'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Solr RELS-EXT ViewableByRole field'),
-    '#default_value' => \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role'),
-  );
-  $form['islandora_xacml_api_rels_viewable_user'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Solr RELS-EXT ViewableByUser field'),
-    '#default_value' => \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user'),
-  );
-
-  return system_settings_form($form);
-}
-
-/**
  * Hook to update Solr queries to respect XACML rules.
  *
  * @param IslandoraSolrQueryProcessor $islandora_solr_query
