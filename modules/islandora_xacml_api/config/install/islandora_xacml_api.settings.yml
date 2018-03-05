@@ -1,0 +1,3 @@
+islandora_xacml_api_save_relationships: true
+islandora_xacml_api_rels_viewable_role: RELS_EXT_isViewableByRole_literal_ms
+islandora_xacml_api_rels_viewable_user: RELS_EXT_isViewableByUser_literal_ms

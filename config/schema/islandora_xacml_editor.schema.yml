@@ -1,0 +1,16 @@
+islandora_xacml_editor.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    islandora_xacml_editor_restricted_dsids:
+      type: string
+    islandora_xacml_editor_restricted_mimes:
+      type: string
+    islandora_xacml_editor_show_dsidregex:
+      type: integer
+    islandora_xacml_editor_show_mimeregex:
+      type: integer
+    islandora_xacml_editor_default_users:
+      type: string
+    islandora_xacml_editor_default_roles:
+      type: string
