@@ -9,47 +9,47 @@
  * Implements hook_drush_command().
  */
 function islandora_xacml_api_drush_command() {
-  $command = array();
+  $command = [];
 
-  $command['islandora-xacml-api-relationships-update-batch'] = array(
+  $command['islandora-xacml-api-relationships-update-batch'] = [
     'bootstrap' => DRUSH_BOOTSTRAP_MAX,
-    'options' => array(
-      'limit' => array(
+    'options' => [
+      'limit' => [
         'value' => 'optional',
         'description' => dt('The max number of objects for which to query at a time. (affects memory usage, defaults to 100)'),
-      ),
-    ),
-    'drupal dependencies' => array(
+      ],
+    ],
+    'drupal dependencies' => [
       'islandora',
       'islandora_xacml_api',
-    ),
-    'examples' => array(
+    ],
+    'examples' => [
       'drush -u 1 islandora-xacml-api-relationships-update-batch',
-    ),
-  );
-  $command['islandora-xacml-api-relationships-missing-rels-int-batch'] = array(
+    ],
+  ];
+  $command['islandora-xacml-api-relationships-missing-rels-int-batch'] = [
     'bootstrap' => DRUSH_BOOTSTRAP_MAX,
-    'aliases' => array(
+    'aliases' => [
       'ixarmrib',
-    ),
-    'options' => array(
-      'limit' => array(
+    ],
+    'options' => [
+      'limit' => [
         'value' => 'optional',
         'description' => dt('The max number of objects for which to query at a time. (affects memory usage, defaults to 100)'),
-      ),
-      'commit' => array(
+      ],
+      'commit' => [
         'description' => dt('Whether to commit the changes to the relations of the POLICY. Defaults to FALSE.'),
         'required' => FALSE,
-      ),
-    ),
-    'drupal dependencies' => array(
+      ],
+    ],
+    'drupal dependencies' => [
       'islandora',
       'islandora_xacml_api',
-    ),
-    'examples' => array(
+    ],
+    'examples' => [
       'drush -u 1 -v islandora-xacml-api-relationships-missing-rels-int-batch',
-    ),
-  );
+    ],
+  ];
   return $command;
 }
 
@@ -57,16 +57,16 @@ function islandora_xacml_api_drush_command() {
  * Command callback; start the update batch.
  */
 function drush_islandora_xacml_api_relationships_update_batch() {
-  $batch = array(
-    'operations' => array(
-      array(
+  $batch = [
+    'operations' => [
+      [
         'islandora_xacml_api_relationships_update_batch_operation',
-        array(
+        [
           drush_get_option('limit', 100),
-        ),
-      ),
-    ),
-  );
+        ],
+      ],
+    ],
+  ];
 
   batch_set($batch);
 
@@ -101,9 +101,9 @@ EOQ;
 
   if (!isset($sandbox['total'])) {
     $sandbox['progress'] = 0;
-    $sandbox['total'] = $tuque->repository->ri->countQuery(format_string($query, array(
+    $sandbox['total'] = $tuque->repository->ri->countQuery(format_string($query, [
       '!filter' => '',
-    )), 'sparql');
+    ]), 'sparql');
     if ($sandbox['total'] == 0) {
       // Nothing to process.
       $context['finished'] = 1;
@@ -111,27 +111,27 @@ EOQ;
       $context['message'] = t('Nothing to fix.');
       return;
     }
-    $sandbox['result_stash'] = array();
+    $sandbox['result_stash'] = [];
   }
 
   if (empty($sandbox['result_stash'])) {
-    $limited_query = format_string($query, array(
+    $limited_query = format_string($query, [
       '!filter' => (isset($sandbox['last_date']) ?
         "FILTER(?created > \"{$sandbox['last_date']}\"^^<xsd:dateTime>)" :
         ''),
-    )) . <<<EOQ
+    ]) . <<<EOQ
 LIMIT $limit
 EOQ;
 
-    drush_log(dt('Querying for @count objects.', array('@count' => $limit)));
+    drush_log(dt('Querying for @count objects.', ['@count' => $limit]));
     $sandbox['result_stash'] = $tuque->repository->ri->sparqlQuery($limited_query);
     if (empty($sandbox['result_stash'])) {
       // Ran out of items early?
       $context['finished'] = 1;
 
-      $context['message'] = t('Updated @count PID(s) and ran out of items early... Somebody manually updated a document?', array(
+      $context['message'] = t('Updated @count PID(s) and ran out of items early... Somebody manually updated a document?', [
         '@count' => $sandbox['progress'],
-      ));
+      ]);
       return;
     }
   }
@@ -145,34 +145,34 @@ EOQ;
   $xacml = new IslandoraXacml($object_to_update, $object_to_update['POLICY']->content);
   $xacml->writeBackToFedora();
 
-  watchdog('islandora_xacml_api', 'Rewrote policy and relationships for @pid.', array(
+  watchdog('islandora_xacml_api', 'Rewrote policy and relationships for @pid.', [
     '@pid' => $updating_pid,
-  ));
+  ]);
 
   $sandbox['progress'] = min($sandbox['total'], $sandbox['progress'] + 1);
   $context['finished'] = $sandbox['progress'] / $sandbox['total'];
 
-  $context['message'] = t('Updated @progress of @total.', array(
+  $context['message'] = t('Updated @progress of @total.', [
     '@progress' => $sandbox['progress'],
     '@total' => $sandbox['total'],
-  ));
+  ]);
 }
 
 /**
  * Drush command callback for RELS-INT inconsistencies batch.
  */
 function drush_islandora_xacml_api_relationships_missing_rels_int_batch() {
-  $batch = array(
-    'operations' => array(
-      array(
+  $batch = [
+    'operations' => [
+      [
         'islandora_xacml_api_relationships_missing_rels_int_update_batch_operation',
-        array(
+        [
           drush_get_option('limit', 100),
           drush_get_option('commit', FALSE),
-        ),
-      ),
-    ),
-  );
+        ],
+      ],
+    ],
+  ];
 
   batch_set($batch);
 
@@ -214,36 +214,36 @@ ORDER BY ?created ?pid
 EOQ;
   if (!isset($sandbox['total'])) {
     $sandbox['progress'] = 0;
-    $sandbox['total'] = $tuque->repository->ri->countQuery(format_string($query, array(
+    $sandbox['total'] = $tuque->repository->ri->countQuery(format_string($query, [
       '!filter' => '',
-    )), 'sparql');
+    ]), 'sparql');
     if ($sandbox['total'] == 0) {
       $context['finished'] = 1;
       $context['message'] = t('Nothing to verify.');
       return;
     }
-    $sandbox['result_stash'] = array();
+    $sandbox['result_stash'] = [];
   }
   if (empty($sandbox['result_stash'])) {
     if (isset($sandbox['last_date'])) {
-      $filter = format_string('FILTER(?created > "!created"^^xsd:dateTime || (?created = "!created"^^xsd:dateTime && xsd:string(?object) > "info:fedora/!pid"^^xsd:string))', array(
+      $filter = format_string('FILTER(?created > "!created"^^xsd:dateTime || (?created = "!created"^^xsd:dateTime && xsd:string(?object) > "info:fedora/!pid"^^xsd:string))', [
         '!created' => $sandbox['last_date'],
         '!pid' => $sandbox['last_pid'],
-      ));
+      ]);
     }
-    $limited_query = format_string($query, array(
+    $limited_query = format_string($query, [
       '!filter' => isset($filter) ? $filter : '',
-    )) . <<<EOQ
+    ]) . <<<EOQ
 LIMIT $limit
 EOQ;
 
-    drush_log(dt('Querying for @count objects.', array('@count' => $limit)));
+    drush_log(dt('Querying for @count objects.', ['@count' => $limit]));
     $sandbox['result_stash'] = $tuque->repository->ri->sparqlQuery($limited_query);
     if (empty($sandbox['result_stash'])) {
       $context['finished'] = 1;
-      $context['message'] = t('Updated @count PID(s) and ran out of items early. POLICY was manually removed?', array(
+      $context['message'] = t('Updated @count PID(s) and ran out of items early. POLICY was manually removed?', [
         '@count' => $sandbox['progress'],
-      ));
+      ]);
       return;
     }
   }
@@ -252,9 +252,9 @@ EOQ;
   $sandbox['last_date'] = $result['created']['value'];
   $sandbox['last_pid'] = $result['object']['value'];
   $object = islandora_object_load($result['object']['value']);
-  drush_log(dt('Processing @pid.', array(
+  drush_log(dt('Processing @pid.', [
     '@pid' => $object->id,
-  )));
+  ]));
   // Get the POLICY and compare it to the RELS-INT statements.
   $xacml = new IslandoraXacml($object);
   $to_update = FALSE;
@@ -281,20 +281,20 @@ EOQ;
     }
   }
   if ($to_update) {
-    drush_log(dt('The POLICY for @pid is missing RELS-INT statements.', array(
+    drush_log(dt('The POLICY for @pid is missing RELS-INT statements.', [
       '@pid' => $object->id,
-    )));
+    ]));
     if ($commit) {
-      drush_log(dt('Updating the RELS-INT statements for @pid.', array(
+      drush_log(dt('Updating the RELS-INT statements for @pid.', [
         '@pid' => $object->id,
-      )));
+      ]));
       $xacml->writeBackToFedora();
     }
   }
   $sandbox['progress'] = min($sandbox['total'], $sandbox['progress'] + 1);
   $context['finished'] = $sandbox['progress'] / $sandbox['total'];
-  $context['message'] = t('Checked @progress of @total.', array(
+  $context['message'] = t('Checked @progress of @total.', [
     '@progress' => $sandbox['progress'],
     '@total' => $sandbox['total'],
-  ));
+  ]);
 }

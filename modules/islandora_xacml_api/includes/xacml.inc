@@ -2,22 +2,26 @@
 
 /**
  * @file
- * This file defines a set of object for manipulating XACML. Other files in the
- * XACML module provide a lower level access to creating XACML these objects
- * work together to provide a nice high level view of a standard islandora
- * XACML object.
+ * This file defines a set of object for manipulating XACML.
+ *
+ * Other files in the XACML module provide a lower level access to creating
+ * XACML these objects work together to provide a nice high level view of a
+ * standard islandora XACML object.
  */
 
 /**
- * This abstract class represents a general XACML Rule. The XACML object
- * contains 4 standard XACML rules, which are all extended from this base class.
+ * This abstract class represents a general XACML Rule.
+ *
+ * The XACML object contains 4 standard XACML rules, which are all extended
+ * from this base class.
  */
+// @codingStandardsIgnoreLine
 abstract class XacmlRule {
 
   /**
    * Private internal representation of the XACML rule.
    *
-   * @var array() containing rules that can be parsed by XacmlWriter
+   * @var array containing rules that can be parsed by XacmlWriter
    * and XacmlParser.
    */
   protected $rule;
@@ -42,19 +46,19 @@ abstract class XacmlRule {
    *   A structure that is parsable by XacmlWriter.
    */
   protected function initializeRule($id, $effect) {
-    $rule = array();
+    $rule = [];
 
     $rule['ruleid'] = $id;
     $rule['effect'] = $effect;
 
-    $rule['dsids'] = array();
-    $rule['mimes'] = array();
-    $rule['dsidregexs'] = array();
-    $rule['mimeregexs'] = array();
-    $rule['methods_default'] = array();
-    $rule['methods'] = array();
-    $rule['users'] = array();
-    $rule['roles'] = array();
+    $rule['dsids'] = [];
+    $rule['mimes'] = [];
+    $rule['dsidregexs'] = [];
+    $rule['mimeregexs'] = [];
+    $rule['methods_default'] = [];
+    $rule['methods'] = [];
+    $rule['users'] = [];
+    $rule['roles'] = [];
 
     return $rule;
   }
@@ -101,7 +105,7 @@ abstract class XacmlRule {
    */
   protected function removeValues($type, $data) {
     if (!is_array($data)) {
-      $data = array($data);
+      $data = [$data];
     }
 
     $this->rule[$type] = array_diff($this->rule[$type], $data);
@@ -142,12 +146,12 @@ abstract class XacmlRule {
    *   from the rule array.
    */
   public function clear($type = NULL) {
-    $dont_touch = array(
+    $dont_touch = [
       'ruleid',
       'effect',
       'methods',
       'methods_default',
-    );
+    ];
 
     $clearable = array_diff(array_keys($this->rule), $dont_touch);
     if (($types = (array) $type) && (count($types) > 0)) {
@@ -155,7 +159,7 @@ abstract class XacmlRule {
     }
 
     foreach ($clearable as $to_clear) {
-      $this->rule[$to_clear] = array();
+      $this->rule[$to_clear] = [];
     }
   }
 
@@ -321,7 +325,7 @@ class XacmlManagementRule extends XacmlRule {
    */
   public function __construct($arg1, $xacml) {
     parent::__construct($arg1, $xacml);
-    $methods_default = array(
+    $methods_default = [
       'addDatastream',
       'addDisseminator',
       'adminPing',
@@ -345,7 +349,7 @@ class XacmlManagementRule extends XacmlRule {
       'dsstate',
       'resolveDatastream',
       'reloadPolicies',
-    );
+    ];
     if ($arg1 == NULL) {
       $this->rule = $this->initializeRule(ISLANDORA_XACML_API_MANAGEMENT_RULE, 'Deny');
       $this->rule['methods'] = $methods_default;
@@ -387,11 +391,11 @@ class XacmlViewingRule extends XacmlRule {
    */
   public function __construct($arg1, $xacml) {
     parent::__construct($arg1, $xacml);
-    $methods_default = array(
+    $methods_default = [
       'api-a',
       'getDatastreamHistory',
       'listObjectInResourceIndexResults',
-    );
+    ];
     if ($arg1 == NULL) {
       $this->rule = $this->initializeRule(ISLANDORA_XACML_API_VIEWING_RULE, 'Deny');
       $this->rule['methods'] = $methods_default;
@@ -501,9 +505,9 @@ class XacmlDatastreamRule extends XacmlRule {
    */
   public function __construct($arg1, $xacml) {
     parent::__construct($arg1, $xacml);
-    $methods_default = array(
+    $methods_default = [
       'getDatastreamDissemination',
-    );
+    ];
     if ($arg1 == NULL) {
       $this->rule = $this->initializeRule(ISLANDORA_XACML_API_DATASTREAM_RULE, 'Deny');
       $this->rule['methods'] = $methods_default;
@@ -755,7 +759,7 @@ class Xacml {
 
   /**
    * The $xacml datastructure parsable by XacmlWriter and XacmlParser.
-   * @var array()
+   * @var array
    */
   protected $xacml;
   /**
@@ -783,26 +787,28 @@ class Xacml {
 
   /**
    * Initializes the $xacml datastructure that can be parsed with XacmlWriter.
+   *
    * @return array
    *   Shell array representing an XACML object.
    */
   protected function initializeXacml() {
     // Create the rule array.
-    $xacml = array(
+    $xacml = [
       'RuleCombiningAlgId' => 'urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable',
-      'rules'              => array(),
-    );
+      'rules'              => [],
+    ];
     return $xacml;
   }
 
   /**
    * The constructor for the XACML object. Initialize new XACML object.
    *
-   * @param (optional) $xacml
+   * @param string|null $xacml
    *   The XACML XML as a string. If this isn't passed the constructor will
    *   instead create a new XACML object that permits everything.
    *
-   * @throws XacmlException if the XML cannot be parsed
+   * @throws XacmlException
+   *   When the XML cannot be parsed.
    */
   public function __construct($xacml = NULL) {
 
@@ -843,7 +849,7 @@ class Xacml {
    *   It takes into account which rules have been populated.
    */
   protected function updateRulesArray() {
-    $this->xacml['rules'] = array();
+    $this->xacml['rules'] = [];
 
     if ($this->datastreamRule->isPopulated()) {
       $this->xacml['rules'][] = $this->datastreamRule->getRuleArray();
@@ -865,7 +871,7 @@ class Xacml {
    */
   public function getDomDocument() {
     $this->updateRulesArray();
-    return XacmlWriter::toDOM($this->xacml);
+    return XacmlWriter::toDom($this->xacml);
   }
 
   /**
@@ -879,6 +885,7 @@ class Xacml {
    */
   public function getXmlString($pretty_print = TRUE) {
     $this->updateRulesArray();
-    return XacmlWriter::toXML($this->xacml, $pretty_print);
+    return XacmlWriter::toXml($this->xacml, $pretty_print);
   }
+
 }

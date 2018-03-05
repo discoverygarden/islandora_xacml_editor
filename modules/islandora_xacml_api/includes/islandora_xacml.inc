@@ -65,16 +65,16 @@ class IslandoraXacml extends Xacml {
    * Writes our relations to Fedora.
    */
   protected function writeRelations() {
-    $view_relationships = array(
+    $view_relationships = [
       'isViewableByUser',
       'isViewableByRole',
-    );
+    ];
     list($viewable_by_user, $viewable_by_role) = $view_relationships;
 
-    $manage_relationships = array(
+    $manage_relationships = [
       'isManageableByUser',
       'isManageableByRole',
-    );
+    ];
     list($manageable_by_user, $manageable_by_role) = $manage_relationships;
 
     $all_relationships = array_merge($view_relationships, $manage_relationships);
@@ -134,4 +134,5 @@ class IslandoraXacml extends Xacml {
 
     $this->object->relationships->commitRelationships();
   }
+
 }

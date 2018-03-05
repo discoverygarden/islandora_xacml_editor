@@ -10,6 +10,7 @@ include_once 'constants.inc';
 /**
  * Class for writing XACML editor datastructures out to XML.
  */
+// @codingStandardsIgnoreLine
 class XacmlWriter {
 
   /**
@@ -21,7 +22,7 @@ class XacmlWriter {
    * @return DomDocument
    *   A DomDocument containing our constructed XACML policy.
    */
-  public static function toDOM($xacml) {
+  public static function toDom(array $xacml) {
     $dom = new DomDocument("1.0", "UTF-8");
 
     XacmlWriter::createRootElement($dom, $xacml);
@@ -42,8 +43,8 @@ class XacmlWriter {
    * @return XML
    *   String containing the XACML as XML.
    */
-  public static function toXML($xacml, $pretty_print = FALSE) {
-    $dom = XacmlWriter::toDOM($xacml);
+  public static function toXml(array $xacml, $pretty_print = FALSE) {
+    $dom = XacmlWriter::toDom($xacml);
     $dom->formatOutput = $pretty_print;
 
     return $dom->saveXML();
@@ -332,4 +333,5 @@ class XacmlWriter {
 
     return $apply;
   }
+
 }
