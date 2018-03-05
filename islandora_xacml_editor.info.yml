@@ -2,6 +2,7 @@ name: 'Islandora XACML Editor'
 description: 'Visually edit XACML policies for objects.'
 dependencies:
   - :islandora
+  - :islandora_xacml_api
 package: 'Islandora Tools'
 core: 8.x
 php: '5.5.9'
