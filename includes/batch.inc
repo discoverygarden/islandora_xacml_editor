@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Batch functionality for the Islandora XACML Editor.
@@ -22,13 +23,13 @@
 function islandora_xacml_editor_batch_function($xml, $pid, $query_array, &$context) {
   if (empty($context['sandbox'])) {
     $query = new IslandoraXacmlEditorQuery($pid, $query_array);
-    $context['sandbox'] = array();
+    $context['sandbox'] = [];
     $context['sandbox']['progress'] = 0;
     $context['sandbox']['pids'] = $query->getPids();
     $context['sandbox']['items'] = count($context['sandbox']['pids']);
     $context['results']['redirect'] = $pid;
-    $context['results']['success'] = array();
-    $context['results']['fail'] = array();
+    $context['results']['success'] = [];
+    $context['results']['fail'] = [];
   }
   $targetpid = array_pop($context['sandbox']['pids']);
   $context['sandbox']['progress']++;
@@ -68,7 +69,7 @@ function islandora_xacml_editor_batch_finished($success, $results, $operations) 
 
   if ($results['fail']) {
     foreach ($results['fail'] as $fail) {
-      drupal_set_message(t("Failed to update: @failed_object. You do not have permission to update this object.", array('@failed_object' => $fail)), 'error');
+      drupal_set_message(t("Failed to update: @failed_object. You do not have permission to update this object.", ['@failed_object' => $fail]), 'error');
     }
   }
 }
@@ -147,7 +148,7 @@ class IslandoraXacmlEditorQuery {
   public function __construct($pid, $query_array) {
     $this->pid = $pid;
     $this->query = $query_array;
-    $this->result_pids = array();
+    $this->result_pids = [];
   }
 
   /**
@@ -179,7 +180,7 @@ class IslandoraXacmlEditorQuery {
       $result_pid = $result['object']['value'];
       if (!isset($this->result_pids[$result_pid])) {
         $this->result_pids[$result_pid] = TRUE;
-        $restricted_cmodels = array();
+        $restricted_cmodels = [];
         if (isset($query_array['restricted_cmodels'])) {
           $restricted_cmodels = $query_array['restricted_cmodels'];
         }

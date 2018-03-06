@@ -25,11 +25,11 @@
  *     models that shouldn't be recursed upon if encountered.
  */
 function hook_islandora_xacml_editor_child_query(AbstractObject $object) {
-  return array(
-    'sample_query' => array(
+  return [
+    'sample_query' => [
       'type' => 'itql',
       'query' => 'select $object from <#ri> where $object <fedora-rels-ext:isMemberOfCollection> <info:fedora/islandora:root>',
       'description' => t('Sweet query bro.'),
-    ),
-  );
+    ],
+  ];
 }

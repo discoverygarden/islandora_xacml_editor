@@ -269,18 +269,18 @@ EOQ;
     ];
     $xml = $object['POLICY']->content;
     $pid = $object->id;
-    $batch = array(
+    $batch = [
       'title' => t('Updating Policies'),
       'progress_message' => t('Please wait if many objects are being updated this could take a few minutes.'),
-      'operations' => array(
-        array(
+      'operations' => [
+        [
           'islandora_xacml_editor_batch_function',
-          array($xml, $pid, $query_array),
-        ),
-      ),
+          [$xml, $pid, $query_array],
+        ],
+      ],
       'finished' => 'islandora_xacml_editor_batch_finished',
       'file' => drupal_get_path('module', 'islandora_xacml_editor') . '/includes/batch.inc',
-    );
+    ];
     batch_set($batch);
   }
 }

@@ -6,18 +6,19 @@
  */
 
 // Permission.
-define('ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION', 'administer xacml inheritance');
+// @codingStandardsIgnoreLine
+const ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION = 'administer xacml inheritance';
 
 /**
  * Implements hook_theme().
  */
 function islandora_xacml_editor_theme($existing, $type, $theme, $path) {
-  return array(
-    'islandora_xacml_editor_policy_management_table' => array(
+  return [
+    'islandora_xacml_editor_policy_management_table' => [
       'file' => 'includes/form.inc',
       'render element' => 'table',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -115,13 +116,13 @@ EOQ;
   $results = $object->repository->ri->sparqlQuery($collection_query);
 
   if (count($results) > 0) {
-    return array(
-      'all_children' => array(
+    return [
+      'all_children' => [
         'type' => 'sparql',
         'query' => $collection_query,
         'description' => t('All children of this collection and collections within this collection (existing and new).'),
-      ),
-    );
+      ],
+    ];
   }
 }
 
@@ -134,21 +135,21 @@ function islandora_xacml_editor_islandora_ingest_steps(array $form_state) {
     return;
   }
   $parent = $shared_storage['parent'];
-  return array(
-    'islandora_xacml_policy' => array(
+  return [
+    'islandora_xacml_policy' => [
       'type' => 'callback',
       'weight' => 8,
       'module' => 'islandora_xacml_editor',
-      'do_function' => array(
+      'do_function' => [
         'function' => 'islandora_xacml_editor_apply_policy',
-        'args' => array($parent),
-      ),
-      'undo_function' => array(
+        'args' => [$parent],
+      ],
+      'undo_function' => [
         'function' => 'islandora_xacml_editor_undo_policy',
-        'args' => array(),
-      ),
-    ),
-  );
+        'args' => [],
+      ],
+    ],
+  ];
 }
 
 /**
@@ -210,14 +211,14 @@ function islandora_xacml_editor_undo_policy(&$form_state) {
  *   The current Form State with manage_xacml element appended.
  */
 function islandora_xacml_editor_islandora_basic_collection_build_manage_object(array $form_state, AbstractObject $object) {
-  $form_state['manage_collection_object']['manage_xacml'] = array(
+  $form_state['manage_collection_object']['manage_xacml'] = [
     '#id' => 'manage-xacml',
     '#group' => 'manage_xacml_object',
     '#access' => user_access(ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION),
     '#type' => 'fieldset',
     '#title' => t('Manage XACML Inheritance'),
     'form' => \Drupal::formBuilder()->getForm('islandora_xacml_editor_manage_xacml_form', $object),
-  );
+  ];
   $form_state['manage_collection_object']['manage_xacml']['form']['#submit'][] = 'islandora_xacml_editor_manage_xacml_form_submit';
   return $form_state;
 }
@@ -233,22 +234,22 @@ function islandora_xacml_editor_islandora_basic_collection_build_manage_object(a
 function islandora_xacml_editor_form_islandora_basic_collection_create_child_collection_form_alter(array &$form, array &$form_state) {
   $parent_object = islandora_object_load($form_state['islandora']['shared_storage']['parent']);
 
-  $xacml_options = array('None' => 'None');
+  $xacml_options = ['None' => 'None'];
 
   // If the form has a step_storage value set for this field, use it.
   $step_storage = &islandora_ingest_form_get_step_storage($form_state, 'islandora_basic_collection');
-  $xacml_selected_option = isset($step_storage['values']['xacml']) ? array($step_storage['values']['xacml'] => $step_storage['values']['xacml']) : array('None' => 'None');
+  $xacml_selected_option = isset($step_storage['values']['xacml']) ? [$step_storage['values']['xacml'] => $step_storage['values']['xacml']] : ['None' => 'None'];
 
   if ($parent_object) {
     $xacml_options[$parent_object->id] = $parent_object->label;
   }
 
-  $form['xacml'] = array(
+  $form['xacml'] = [
     '#type' => 'select',
     '#title' => t('Inherit XACML policy from'),
     '#options' => $xacml_options,
     '#default_value' => $xacml_selected_option,
-  );
+  ];
 
   // Using after_build to alter the weight dynamically.
   $form['#after_build'][] = 'islandora_xacml_editor_after_build';
