@@ -145,7 +145,7 @@ EOQ;
   $xacml = new IslandoraXacml($object_to_update, $object_to_update['POLICY']->content);
   $xacml->writeBackToFedora();
 
-  watchdog('islandora_xacml_api', 'Rewrote policy and relationships for @pid.', [
+  \Drupal::logger('islandora_xacml_api')->notice('Rewrote policy and relationships for @pid.', [
     '@pid' => $updating_pid,
   ]);
 
