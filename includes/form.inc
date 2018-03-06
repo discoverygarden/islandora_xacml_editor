@@ -8,11 +8,26 @@
  * The XACML editing form.
  */
 function islandora_xacml_editor_form($form, &$form_state, $object) {
-  drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
+  // @FIXME
+// The Assets API has totally changed. CSS, JavaScript, and libraries are now
+// attached directly to render arrays using the #attached property.
+// 
+// 
+// @see https://www.drupal.org/node/2169605
+// @see https://www.drupal.org/node/2408597
+// drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
+
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/breadcrumb');
 
-  drupal_set_title(t('Islandora XACML Editor'));
+  // @FIXME
+// drupal_set_title() has been removed. There are now a few ways to set the title
+// dynamically, depending on the situation.
+// 
+// 
+// @see https://www.drupal.org/node/2067859
+// drupal_set_title(t('Islandora XACML Editor'));
+
 
   if (!isset($form_state['islandora_xacml'])) {
     $form_state['islandora_xacml'] = array();
@@ -799,7 +814,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
     $form['dsid_mime']['dsid_regex'] = array(
       '#type' => 'textfield',
       '#title' => t('DSID Regex'),
-      '#description' => l(t('XML regex'), 'http://www.w3.org/TR/xmlschema-0/#regexAppendix'),
+      '#description' => \Drupal::l(t('XML regex'), \Drupal\Core\Url::fromUri('http://www.w3.org/TR/xmlschema-0/#regexAppendix')),
       '#size' => 35,
       '#prefix' => '<div class="islandora_xacml_block">',
       '#name' => 'dsid_regex_add_textfield',
@@ -853,7 +868,7 @@ function islandora_xacml_editor_form($form, &$form_state, $object) {
     $form['dsid_mime']['mime_regex'] = array(
       '#type' => 'textfield',
       '#title' => t('MIME type Regex'),
-      '#description' => l(t('XML regex'), 'http://www.w3.org/TR/xmlschema-0/#regexAppendix'),
+      '#description' => \Drupal::l(t('XML regex'), \Drupal\Core\Url::fromUri('http://www.w3.org/TR/xmlschema-0/#regexAppendix')),
       '#size' => 35,
       '#prefix' => '<div class="islandora_xacml_block">',
       '#name' => 'mime_regex_add_textfield',
@@ -992,7 +1007,15 @@ function islandora_xacml_editor_form_table(array $passed_rows) {
  * Implements hook_validate().
  */
 function islandora_xacml_editor_form_validate(&$form, &$form_state) {
-  drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
+  // @FIXME
+// The Assets API has totally changed. CSS, JavaScript, and libraries are now
+// attached directly to render arrays using the #attached property.
+// 
+// 
+// @see https://www.drupal.org/node/2169605
+// @see https://www.drupal.org/node/2408597
+// drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
+
   $button_trig = array(
     'dsid_add_button',
     'mime_add_button',
@@ -1125,7 +1148,15 @@ function islandora_xacml_editor_form_submit(&$form, &$form_state) {
  */
 function theme_islandora_xacml_editor_policy_management_table(array $variables) {
   // Manually add the table select javascript as we are using a custom table.
-  drupal_add_js('misc/tableselect.js');
+  // @FIXME
+// The Assets API has totally changed. CSS, JavaScript, and libraries are now
+// attached directly to render arrays using the #attached property.
+// 
+// 
+// @see https://www.drupal.org/node/2169605
+// @see https://www.drupal.org/node/2408597
+// drupal_add_js('misc/tableselect.js');
+
   $table = $variables['table'];
   $row_elements = $table['rows'];
   $rows = array();
@@ -1150,7 +1181,16 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
     'sticky' => NULL,
     'empty' => t("No child collection(s)."),
   );
-  return theme('table', $variables);
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('table', $variables);
+
 }
 /**
  * AJAX callback to remove the selected filters from the rules table.

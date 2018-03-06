@@ -214,7 +214,7 @@ function islandora_xacml_editor_islandora_basic_collection_build_manage_object(a
   $form_state['manage_collection_object']['manage_xacml'] = [
     '#id' => 'manage-xacml',
     '#group' => 'manage_xacml_object',
-    '#access' => user_access(ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION),
+    '#access' => \Drupal::currentUser()->hasPermission(ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION),
     '#type' => 'fieldset',
     '#title' => t('Manage XACML Inheritance'),
     'form' => \Drupal::formBuilder()->getForm('islandora_xacml_editor_manage_xacml_form', $object),
@@ -310,23 +310,35 @@ function islandora_xacml_editor_manage_xacml_form(array $form, array &$form_stat
         $options[$parent_object->id] = $parent_object->label;
       }
       $default_value = (isset($rels_ext[0]) ? $rels_ext[0]['object']['value'] : 'none');
-      $rows[$pid] = array(
-        'selected' => array(
-          '#type' => 'checkbox',
-          '#default_value' => FALSE,
-        ),
-        'title' => array(
-          '#markup' => l(t('@label (@pid)', array('@label' => $child_collection->label, '@pid' => $pid)), "islandora/object/{$pid}"),
-        ),
-        'parents' => array(
-          '#type' => 'select',
-          '#options' => $options,
-          '#default_value' => $default_value,
-        ),
-      );
+      // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $rows[$pid] = array(
+//         'selected' => array(
+//           '#type' => 'checkbox',
+//           '#default_value' => FALSE,
+//         ),
+//         'title' => array(
+//           '#markup' => l(t('@label (@pid)', array('@label' => $child_collection->label, '@pid' => $pid)), "islandora/object/{$pid}"),
+//         ),
+//         'parents' => array(
+//           '#type' => 'select',
+//           '#options' => $options,
+//           '#default_value' => $default_value,
+//         ),
+//       );
+
     }
     // Theme pager doesn't support url fragments in D7 so we insert manually.
-    $pager = theme('pager', array('quantity' => 20, 'element' => $pager_element));
+    // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $pager = theme('pager', array('quantity' => 20, 'element' => $pager_element));
+
     $pager = islandora_basic_collection_append_fragment_to_pager_url($pager, '#manage-xacml');
     return array(
       '#action' => request_uri() . '#manage-xacml',
