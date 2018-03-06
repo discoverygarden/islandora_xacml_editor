@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * This class parses XACML into datastructures used by the XACML class.
  */
-// @codingStandardsIgnoreLine
 class XacmlParser {
 
   /**

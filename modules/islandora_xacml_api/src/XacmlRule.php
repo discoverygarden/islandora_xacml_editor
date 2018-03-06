@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
@@ -7,7 +8,6 @@ namespace Drupal\islandora_xacml_api;
  * The XACML object contains 4 standard XACML rules, which are all extended
  * from this base class.
  */
-// @codingStandardsIgnoreLine
 abstract class XacmlRule {
 
   /**

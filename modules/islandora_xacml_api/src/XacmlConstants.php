@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * Helper class specifying some useful constants.
  */
-// @codingStandardsIgnoreLine
 class XacmlConstants {
   const XACML = "urn:oasis:names:tc:xacml:1.0:policy";
   const MIME = "urn:fedora:names:fedora:2.1:resource:datastream:mimeType";

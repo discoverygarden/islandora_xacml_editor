@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * Concrete implementation for the rule restricting who can manage an object.
  */
-// @codingStandardsIgnoreLine
 class XacmlManagementRule extends XacmlRule {
 
   /**

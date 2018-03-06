@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * Class for writing XACML editor datastructures out to XML.
  */
-// @codingStandardsIgnoreLine
 class XacmlWriter {
 
   /**

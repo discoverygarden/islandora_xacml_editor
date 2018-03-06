@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
@@ -16,7 +17,6 @@ namespace Drupal\islandora_xacml_api;
  *   xacml->managementRule->addRole(array('roleC', 'roleD'))
  * @endcode
  */
-// @codingStandardsIgnoreLine
 class Xacml {
 
   /**
@@ -35,7 +35,7 @@ class Xacml {
   /**
    * Rule controling who can manage the object with this XACML policy.
    *
-   * @var XacmlManagementRule
+   * @var Drupal\islandora_xacml_api\XacmlManagementRule
    */
   public $managementRule;
   /**

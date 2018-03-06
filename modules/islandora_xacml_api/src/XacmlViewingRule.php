@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * Concrete implementation for the rule restricting who can view an object.
  */
-// @codingStandardsIgnoreLine
 class XacmlViewingRule extends XacmlRule {
 
   /**
@@ -13,7 +13,7 @@ class XacmlViewingRule extends XacmlRule {
    * @param mixed $arg1
    *   Existing Rule datastructure with ID ISLANDORA_XACML_API_VIEWING_RULE or
    *   NULL.
-   * @param Xacml $xacml
+   * @param Drupal\islandora_xacml_api\Xacml $xacml
    *   Reference to the parent XACML object.
    *
    * @note

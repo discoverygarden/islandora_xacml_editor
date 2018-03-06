@@ -11,6 +11,13 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
+use Drupal\islandora_xacml_api\IslandoraXacml;
+use Drupal\islandora_xacml_api\Xacml;
+use Drupal\islandora_xacml_api\XacmlException;
+
+/**
+ * The XACML editing form.
+ */
 class IslandoraXacmlEditorForm extends FormBase {
 
   /**
@@ -24,8 +31,8 @@ class IslandoraXacmlEditorForm extends FormBase {
     // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
-// 
-// 
+//
+//
 // @see https://www.drupal.org/node/2169605
 // @see https://www.drupal.org/node/2408597
 // drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
@@ -36,8 +43,8 @@ class IslandoraXacmlEditorForm extends FormBase {
     // @FIXME
     // drupal_set_title() has been removed. There are now a few ways to set the title
     // dynamically, depending on the situation.
-    // 
-    // 
+    //
+    //
     // @see https://www.drupal.org/node/2067859
     // drupal_set_title(t('Islandora XACML Editor'));
 
@@ -99,7 +106,7 @@ class IslandoraXacmlEditorForm extends FormBase {
           drupal_set_message(t('The datastream XACML policy is not valid.'), 'error');
         }
       }
-      
+
         catch (XacmlException $e) {
         \Drupal::logger('islandora_xacml_editor')->error('Exception in Islandora Xacml: @message', [
           '@message',
@@ -1012,8 +1019,8 @@ class IslandoraXacmlEditorForm extends FormBase {
     // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
-// 
-// 
+//
+//
 // @see https://www.drupal.org/node/2169605
 // @see https://www.drupal.org/node/2408597
 // drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
@@ -1152,4 +1159,3 @@ class IslandoraXacmlEditorForm extends FormBase {
   }
 
 }
-?>

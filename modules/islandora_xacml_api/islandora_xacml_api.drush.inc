@@ -5,6 +5,8 @@
  * Drush hook implementations and associated functions.
  */
 
+use Drupal\islandora_xacml_api\IslandoraXacml;
+
 /**
  * Implements hook_drush_command().
  */

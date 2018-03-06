@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
@@ -11,7 +12,6 @@ namespace Drupal\islandora_xacml_api;
  * This is entirely managed by Xacml object so not much needs to be said about
  * it.
  */
-// @codingStandardsIgnoreLine
 class XacmlPermitEverythingRule extends XacmlRule {
 
   /**

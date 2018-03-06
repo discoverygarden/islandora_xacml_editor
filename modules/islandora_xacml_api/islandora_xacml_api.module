@@ -5,6 +5,8 @@
  * Islandora Xacml module API functions.
  */
 
+use Drupal\islandora_xacml_api\IslandoraXacml;
+
 // @codingStandardsIgnoreStart
 const ISLANDORA_XACML_API_MANAGEMENT_RULE = 'deny-management-functions';
 const ISLANDORA_XACML_API_DATASTREAM_RULE = 'deny-dsid-mime';

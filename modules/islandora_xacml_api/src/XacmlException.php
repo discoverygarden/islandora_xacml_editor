@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
@@ -7,6 +8,5 @@ namespace Drupal\islandora_xacml_api;
  * It currently doesn't override anything from the base exception
  * class and is just here as a placeholder.
  */
-// @codingStandardsIgnoreLine
 class XacmlException extends Exception {
 }

@@ -12,6 +12,9 @@ use Drupal\Core\Controller\ControllerBase;
  */
 class DefaultController extends ControllerBase {
 
+  /**
+   * Callback that performs autocomplete operations.
+   */
   public function islandora_xacml_editor_dsid_autocomplete($pid, $string) {
     $object = islandora_object_load($pid);
     $output = [];
@@ -34,6 +37,9 @@ class DefaultController extends ControllerBase {
     drupal_json_output($output);
   }
 
+  /**
+   * Callback that performs autocomplete operations.
+   */
   public function islandora_xacml_editor_mime_autocomplete($pid, $string) {
     module_load_include('inc', 'islandora', 'includes/utilities');
 

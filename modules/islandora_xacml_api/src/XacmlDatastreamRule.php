@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * A concrete implementation to restrict certain mimetypes and datastreams.
  */
-// @codingStandardsIgnoreLine
 class XacmlDatastreamRule extends XacmlRule {
 
   /**
@@ -13,7 +13,7 @@ class XacmlDatastreamRule extends XacmlRule {
    * @param mixed $arg1
    *   NULL or an existing $rule array with ID
    *   ISLANDORA_XACML_API_DATASTREAM_RULE.
-   * @param Xacml $xacml
+   * @param Drupal\islandora_xacml_api\Xacml $xacml
    *   Reference to parent Xacml object.
    */
   public function __construct($arg1, Xacml $xacml) {

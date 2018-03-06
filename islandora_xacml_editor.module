@@ -5,6 +5,8 @@
  * The main module file for the Islandora XACML Editor.
  */
 
+use Drupal\islandora_xacml_api\IslandoraXacml;
+
 // Permission.
 // @codingStandardsIgnoreLine
 const ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION = 'administer xacml inheritance';
@@ -334,8 +336,8 @@ function islandora_xacml_editor_manage_xacml_form(array $form, array &$form_stat
 // Calling _theme() directly can alter the expected output and potentially
 // introduce security issues (see https://www.drupal.org/node/2195739). You
 // should use renderable arrays instead.
-// 
-// 
+//
+//
 // @see https://www.drupal.org/node/2195739
 // $pager = theme('pager', array('quantity' => 20, 'element' => $pager_element));
 

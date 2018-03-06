@@ -1,10 +1,10 @@
 <?php
+
 namespace Drupal\islandora_xacml_api;
 
 /**
  * Subclass Xacml to facilitate communication to Islandora/Fedora.
  */
-// @codingStandardsIgnoreLine
 class IslandoraXacml extends Xacml {
   /**
    * The object of the POLICY.

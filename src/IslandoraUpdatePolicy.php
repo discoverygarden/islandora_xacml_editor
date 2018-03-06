@@ -1,5 +1,9 @@
 <?php
+
 namespace Drupal\islandora_xacml_editor;
+
+use Drupal\islandora_xacml_api\IslandoraXacml;
+use Drupal\islandora_xacml_api\XacmlException;
 
 /**
  * Class used in the batch updating of POLICY datastreams on objects.

@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\islandora_xacml_editor;
 
 /**
