@@ -2,6 +2,8 @@
 
 namespace Drupal\islandora_xacml_api;
 
+use AbstractObject;
+
 /**
  * Subclass Xacml to facilitate communication to Islandora/Fedora.
  */

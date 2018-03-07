@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Houses the administration form for the Islanora XACML Editor.
@@ -11,8 +12,8 @@ function islandora_xacml_editor_settings() {
   // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
-// 
-// 
+//
+//
 // @see https://www.drupal.org/node/2169605
 // @see https://www.drupal.org/node/2408597
 // drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
@@ -55,18 +56,18 @@ function islandora_xacml_editor_settings() {
   );
 
   // Get the user list.
-  $users = array();
+  $users = [];
   $result = db_query('SELECT u.uid, u.name FROM {users} u');
   foreach ($result as $user) {
-    $user->uid == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->name] = $user->name;
-    if ($user->uid == 1) {
-      $admin_user = $user->name;
-      $form_state['islandora_xacml']['admin_user'] = $user->name;
+    $user->id() == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->getAccountName()] = $user->getAccountName();
+    if ($user->id() == 1) {
+      $admin_user = $user->getAccountName();
+      $form_state['islandora_xacml']['admin_user'] = $user->getAccountName();
     }
   }
 
   // Get role list.
-  $roles = array();
+  $roles = [];
   $result = db_query('SELECT r.rid, r.name FROM {role} r');
   foreach ($result as $role) {
     $role->rid == 0 ? $roles['anonymous'] = 'anonymous' : $roles[$role->name] = $role->name;

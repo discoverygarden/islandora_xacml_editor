@@ -70,15 +70,15 @@ class IslandoraXacmlEditorForm extends FormBase {
     $users = [];
     $result = db_query('SELECT u.uid, u.name FROM {users} u');
     foreach ($result as $user) {
-      $user->uid == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->name] = $user->name;
-      if ($user->uid == 1) {
-        $admin_user = $user->name;
-        $form_state->set(['islandora_xacml', 'admin_user'], $user->name);
+      $user->id() == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->getAccountName()] = $user->getAccountName();
+      if ($user->id() == 1) {
+        $admin_user = $user->getAccountName();
+        $form_state->set(['islandora_xacml', 'admin_user'], $user->getAccountName());
       }
     }
 
     // Current user.
-    $form_state->set(['islandora_xacml', 'current_user'], \Drupal::currentUser()->name);
+    $form_state->set(['islandora_xacml', 'current_user'], \Drupal::currentUser()->getAccountName());
 
     // Get role list.
     $roles = [];

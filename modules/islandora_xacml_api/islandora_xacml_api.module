@@ -23,8 +23,8 @@ const ISLANDORA_XACML_API_PERMIT_RULE = 'allow-everything-else';
 function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $islandora_solr_query) {
   $user = \Drupal::currentUser();
 
-  if ($user->uid != 0) {
-    $user_name = $user->name;
+  if ($user->id() != 0) {
+    $user_name = $user->getAccountName();
   }
   else {
     $user_name = 'anonymous';
@@ -33,7 +33,7 @@ function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $i
   $fq = \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user') . ":\"" . $user_name . "\" OR ";
 
   // Check if any of my roles are allowed.
-  foreach ($user->roles as $role) {
+  foreach ($user->getRoles as $role) {
     $fq .= \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role') . ":\"" . $role . "\" OR ";
   }
   // Check if the object is open (unrestricted).
@@ -182,17 +182,20 @@ function islandora_xacml_api_islandora_object_access($op, $object, $user) {
   // ... really, we should never get to this point if the POLICY isn't
   // readable...
   if (isset($object['POLICY'])) {
-    if ($user->uid === 0) {
-      $user->name = 'anonymous';
+    if ($user->id() === 0) {
+      $user_name = 'anonymous';
+    }
+    else {
+      $user_name = $user->getAccountName();
     }
 
     $xacml = new IslandoraXacml($object);
 
     if (ISLANDORA_VIEW_OBJECTS == $op) {
-      return $xacml->viewingRule->hasPermission($user->name, $user->roles);
+      return $xacml->viewingRule->hasPermission($user->id(), $user->getRoles());
     }
     elseif (in_array($op, $management_operations) && $xacml->managementRule->isPopulated()) {
-      return $xacml->managementRule->hasPermission($user->name, $user->roles);
+      return $xacml->managementRule->hasPermission($user_name, $user->getRoles());
     }
   }
 
@@ -204,8 +207,11 @@ function islandora_xacml_api_islandora_object_access($op, $object, $user) {
  */
 function islandora_xacml_api_islandora_datastream_access($op, $datastream, $user) {
   if (isset($datastream->parent['POLICY'])) {
-    if ($user->uid === 0) {
-      $user->name = 'anonymous';
+    if ($user->id() === 0) {
+      $user_name = 'anonymous';
+    }
+    else {
+      $user_name = $user->getAccountName();
     }
 
     $xacml = new IslandoraXacml($datastream->parent);
@@ -221,7 +227,7 @@ function islandora_xacml_api_islandora_datastream_access($op, $datastream, $user
           $op, $datastream->parent, $user
       );
       $datastream_results = $xacml->datastreamRule->hasPermission(
-          $user->name, $user->roles, $datastream->mimetype, $datastream->id
+          $user_name, $user->getRoles(), $datastream->mimetype, $datastream->id
       );
 
       $results = (array) $object_results;

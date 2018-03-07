@@ -110,7 +110,7 @@ abstract class XacmlRule {
   /**
    * Constructs new XacmlRule.
    *
-   * @param array $arg1
+   * @param array|null $arg1
    *   An array containing an pre-exisitng XACML rule or NULL.
    * @param Xacml $xacml
    *   A reference to the XACML dobject that this datastructure is part of.
@@ -122,7 +122,7 @@ abstract class XacmlRule {
    *   datastructure correctly if arg1 is NULL by calling
    *   parent::initializeRule() with the proper methods.
    */
-  public function __construct(array $arg1, Xacml $xacml) {
+  public function __construct($arg1, Xacml $xacml) {
     if (is_array($arg1)) {
       $this->rule = $arg1;
       /* remove them now, add them later */

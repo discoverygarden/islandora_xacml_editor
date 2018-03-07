@@ -49,8 +49,8 @@ class IslandoraXacmlEditorSettings extends ConfigFormBase {
     // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
-// 
-// 
+//
+//
 // @see https://www.drupal.org/node/2169605
 // @see https://www.drupal.org/node/2408597
 // drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
@@ -96,10 +96,10 @@ class IslandoraXacmlEditorSettings extends ConfigFormBase {
     $users = [];
     $result = db_query('SELECT u.uid, u.name FROM {users} u');
     foreach ($result as $user) {
-      $user->uid == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->name] = $user->name;
-      if ($user->uid == 1) {
-        $admin_user = $user->name;
-        $form_state->set(['islandora_xacml', 'admin_user'], $user->name);
+      $user->id() == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->getAccountName()] = $user->getAccountName();
+      if ($user->id() == 1) {
+        $admin_user = $user->getAccountName();
+        $form_state->set(['islandora_xacml', 'admin_user'], $user->getAccountName());
       }
     }
 
@@ -132,4 +132,3 @@ class IslandoraXacmlEditorSettings extends ConfigFormBase {
   }
 
 }
-?>
