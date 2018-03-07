@@ -2,6 +2,9 @@
 
 namespace Drupal\islandora_xacml_api;
 
+use DomDocument;
+use DomXpath;
+
 /**
  * This class parses XACML into datastructures used by the XACML class.
  */

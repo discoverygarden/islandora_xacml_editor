@@ -2,6 +2,8 @@
 
 namespace Drupal\islandora_xacml_api;
 
+use DomDocument;
+
 /**
  * Class for writing XACML editor datastructures out to XML.
  */
