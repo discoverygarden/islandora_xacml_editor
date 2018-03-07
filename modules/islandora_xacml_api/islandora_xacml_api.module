@@ -117,11 +117,11 @@ function islandora_xacml_api_islandora_basic_collection_get_query_optionals($typ
   switch ($type) {
     case 'manage':
       $to_return = [
-        format_string('?object <!uri!pred> ?role', [
+        strtr('?object <!uri!pred> ?role', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isManagableByRole',
         ]),
-        format_string('?object <!uri!pred> ?user', [
+        strtr('?object <!uri!pred> ?user', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isManagableByUser',
         ]),
@@ -131,11 +131,11 @@ function islandora_xacml_api_islandora_basic_collection_get_query_optionals($typ
     case 'view':
     default:
       $to_return = [
-        format_string('?object <!uri!pred> ?role', [
+        strtr('?object <!uri!pred> ?role', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isViewableByRole',
         ]),
-        format_string('?object <!uri!pred> ?user', [
+        strtr('?object <!uri!pred> ?user', [
           '!uri' => ISLANDORA_RELS_EXT_URI,
           '!pred' => 'isViewableByUser',
         ]),

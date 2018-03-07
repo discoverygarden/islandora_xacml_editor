@@ -103,7 +103,7 @@ EOQ;
 
   if (!isset($sandbox['total'])) {
     $sandbox['progress'] = 0;
-    $sandbox['total'] = $tuque->repository->ri->countQuery(format_string($query, [
+    $sandbox['total'] = $tuque->repository->ri->countQuery(strtr($query, [
       '!filter' => '',
     ]), 'sparql');
     if ($sandbox['total'] == 0) {
@@ -117,7 +117,7 @@ EOQ;
   }
 
   if (empty($sandbox['result_stash'])) {
-    $limited_query = format_string($query, [
+    $limited_query = strtr($query, [
       '!filter' => (isset($sandbox['last_date']) ?
         "FILTER(?created > \"{$sandbox['last_date']}\"^^<xsd:dateTime>)" :
         ''),
@@ -216,7 +216,7 @@ ORDER BY ?created ?pid
 EOQ;
   if (!isset($sandbox['total'])) {
     $sandbox['progress'] = 0;
-    $sandbox['total'] = $tuque->repository->ri->countQuery(format_string($query, [
+    $sandbox['total'] = $tuque->repository->ri->countQuery(strtr($query, [
       '!filter' => '',
     ]), 'sparql');
     if ($sandbox['total'] == 0) {
@@ -228,12 +228,12 @@ EOQ;
   }
   if (empty($sandbox['result_stash'])) {
     if (isset($sandbox['last_date'])) {
-      $filter = format_string('FILTER(?created > "!created"^^xsd:dateTime || (?created = "!created"^^xsd:dateTime && xsd:string(?object) > "info:fedora/!pid"^^xsd:string))', [
+      $filter = strtr('FILTER(?created > "!created"^^xsd:dateTime || (?created = "!created"^^xsd:dateTime && xsd:string(?object) > "info:fedora/!pid"^^xsd:string))', [
         '!created' => $sandbox['last_date'],
         '!pid' => $sandbox['last_pid'],
       ]);
     }
-    $limited_query = format_string($query, [
+    $limited_query = strtr($query, [
       '!filter' => isset($filter) ? $filter : '',
     ]) . <<<EOQ
 LIMIT $limit

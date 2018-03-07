@@ -493,8 +493,8 @@ class IslandoraXacmlEditorForm extends FormBase {
           $remove_count++;
         }
 
-        $remove_output = \Drupal::translation()->formatPlural($remove_count, '!filter_count applied filter was removed.', '!filter_count applied filters were removed.', [
-          '!filter_count' => $remove_count
+        $remove_output = \Drupal::translation()->formatPlural($remove_count, '@filter_count applied filter was removed.', '@filter_count applied filters were removed.', [
+          '@filter_count' => $remove_count
           ]);
         drupal_set_message($remove_output);
       }
@@ -527,8 +527,8 @@ class IslandoraXacmlEditorForm extends FormBase {
             }
             $remove_count++;
           }
-          $remove_output = \Drupal::translation()->formatPlural($remove_count, '!filter_count applied filter was removed.', '!filter_count applied filters were removed.', [
-            '!filter_count' => $remove_count
+          $remove_output = \Drupal::translation()->formatPlural($remove_count, '@filter_count applied filter was removed.', '@filter_count applied filters were removed.', [
+            '@filter_count' => $remove_count
             ]);
           drupal_set_message($remove_output);
         }
