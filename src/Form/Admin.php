@@ -11,7 +11,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
-class IslandoraXacmlEditorSettings extends ConfigFormBase {
+class Admin extends ConfigFormBase {
 
   /**
    * {@inheritdoc}

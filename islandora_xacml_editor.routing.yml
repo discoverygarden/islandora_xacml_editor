@@ -1,0 +1,7 @@
+islandora_xacml_editor.admin:
+  path: '/admin/config/islandora/tools/xacml/editor'
+  defaults:
+    _title: 'Islandora XACML Editor'
+    _form: '\Drupal\islandora_xacml_editor\Form\Admin'
+  requirements:
+    _permission: 'administer islandora_xacml_editor'
