@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Autocomplete functionality for the Islandora XACML Editor.
@@ -13,13 +14,13 @@
  * @return array
  *   An array of MIME types.
  */
-function islandora_xacml_editor_retrieve_mimes($models) {
+function islandora_xacml_editor_retrieve_mimes(array $models) {
   module_load_include('inc', 'islandora', 'includes/utilities');
 
   $mimes = [];
   $datastreams = islandora_get_datastreams_requirements_from_models($models);
 
-  foreach ($datastreams as $key => $value) {
+  foreach ($datastreams as $value) {
     foreach ($value['mime'] as $mime) {
       if (!in_array($mime, $mimes)) {
         $mimes[$mime] = $value['mime'];

@@ -16,7 +16,7 @@ class IslandoraUpdatePolicy {
    *
    * @param string $pid
    *   The pid of the object we are batching.
-   * @param XML $xml
+   * @param string $xml
    *   The XACML XML.
    */
   public function __construct($pid, $xml) {
@@ -56,4 +56,5 @@ class IslandoraUpdatePolicy {
     $object_policy->writeBackToFedora();
     return TRUE;
   }
+
 }

@@ -11,7 +11,7 @@ use Drupal\islandora_xacml_editor\IslandoraXacmlEditorQuery;
 /**
  * Batch callback function which updates the POLICY for a target pid.
  *
- * @param XML $xml
+ * @param string $xml
  *   The XML content defining an XACML policy.
  * @param string $pid
  *   The PID of the object we are going to update.
@@ -20,10 +20,10 @@ use Drupal\islandora_xacml_editor\IslandoraXacmlEditorQuery;
  *   -type: The type of query, either sparql or itql.
  *   -query: The defined query string.
  *   -description: The human-readable description of the query.
- * @param array $context
+ * @param DrushBatchContext|array $context
  *   Context array used in the batch.
  */
-function islandora_xacml_editor_batch_function($xml, $pid, $query_array, &$context) {
+function islandora_xacml_editor_batch_function($xml, $pid, array $query_array, &$context) {
   if (empty($context['sandbox'])) {
     $query = new IslandoraXacmlEditorQuery($pid, $query_array);
     $context['sandbox'] = [];
@@ -61,7 +61,7 @@ function islandora_xacml_editor_batch_function($xml, $pid, $query_array, &$conte
  * @param array $operations
  *   The operations array that was used in the batch.
  */
-function islandora_xacml_editor_batch_finished($success, $results, $operations) {
+function islandora_xacml_editor_batch_finished($success, array $results, array $operations) {
   if ($success) {
     $message = \Drupal::translation()->formatPlural(count($results['success']), 'One policy updated.', '@count policies updated.');
   }

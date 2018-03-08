@@ -1,7 +1,4 @@
-<?php /**
- * @file
- * Contains \Drupal\islandora_xacml_editor\Controller\DefaultController.
- */
+<?php
 
 namespace Drupal\islandora_xacml_editor\Controller;
 

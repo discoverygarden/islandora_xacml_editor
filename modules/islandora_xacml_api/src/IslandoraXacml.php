@@ -30,7 +30,7 @@ class IslandoraXacml extends Xacml {
   /**
    * Constructor.
    *
-   * @param AbstractObject $object
+   * @param \AbstractObject $object
    *   A AbstractObject.
    * @param mixed $xacml
    *   A string containing XACML XML, or NULL to attempt to load from the given

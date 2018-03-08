@@ -5,19 +5,13 @@
  * Houses the forms used in the Islandora XACML Editor.
  */
 
-use Drupal\islandora_xacml_api\IslandoraXacml;
-use Drupal\islandora_xacml_api\Xacml;
-use Drupal\islandora_xacml_api\XacmlException;
-
 /**
  * Retrieves the users selected in each 'Users' portion for datastream rules.
  *
  * @param Xacml $xacml
  *   The XACML object.
- *
  * @param bool $new_xacml
  *   Whether there already exists an XACML policy or not.
- *
  * @param string $rule
  *   The rule which we are checking against.
  *
@@ -49,10 +43,8 @@ function islandora_xacml_editor_retrieve_users($xacml, $new_xacml, $rule) {
  *
  * @param Xacml $xacml
  *   The XACML object.
- *
  * @param bool $new_xacml
  *   Whether there already exists an XACML policy or not.
- *
  * @param string $rule
  *   The rule which we are checking against.
  *

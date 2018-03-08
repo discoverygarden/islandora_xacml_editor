@@ -1,16 +1,14 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\islandora_xacml_editor\Form\IslandoraXacmlEditorSettings.
- */
-
 namespace Drupal\islandora_xacml_editor\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
+/**
+ * Module settings form.
+ */
 class Admin extends ConfigFormBase {
 
   /**
@@ -59,37 +57,37 @@ class Admin extends ConfigFormBase {
 
     $form['islandora_xacml_editor_show_dsidregex'] = [
       '#type' => 'checkbox',
-      '#title' => t('Display the DSID regex textfield?'),
+      '#title' => $this->t('Display the DSID regex textfield?'),
       '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex'),
     ];
     $form['islandora_xacml_editor_show_mimeregex'] = [
       '#type' => 'checkbox',
-      '#title' => t('Display the MIME type regex textfield?'),
+      '#title' => $this->t('Display the MIME type regex textfield?'),
       '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex'),
     ];
     $form['islandora_xacml_editor_restrictions'] = [
       '#type' => 'fieldset',
-      '#title' => t('Restrictions for DSID and MIME type'),
+      '#title' => $this->t('Restrictions for DSID and MIME type'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#description' => 'DSIDs and MIMEs that will not appear in the autocomplete fields or be allowed as filters.',
     ];
     $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_dsids'] = [
       '#type' => 'textarea',
-      '#title' => t('DSID'),
+      '#title' => $this->t('DSID'),
       '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids'),
     ];
     $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_mimes'] = [
       '#type' => 'textarea',
-      '#title' => t('MIME type'),
+      '#title' => $this->t('MIME type'),
       '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes'),
     ];
     $form['islandora_xacml_editor_defaults'] = [
       '#type' => 'fieldset',
-      '#title' => t('Default users and roles'),
+      '#title' => $this->t('Default users and roles'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#description' => t('The users and roles that will appear as the default selected unless there is a existing XACML policy attached to an object.'),
+      '#description' => $this->t('The users and roles that will appear as the default selected unless there is a existing XACML policy attached to an object.'),
     ];
 
     // Get the user list.
@@ -116,7 +114,7 @@ class Admin extends ConfigFormBase {
 
     $form['islandora_xacml_editor_defaults']['islandora_xacml_editor_default_users'] = [
       '#type' => 'select',
-      '#title' => t('Users'),
+      '#title' => $this->t('Users'),
       '#options' => $users,
       '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_users'),
       '#multiple' => TRUE,
@@ -125,7 +123,7 @@ class Admin extends ConfigFormBase {
     ];
     $form['islandora_xacml_editor_defaults']['islandora_xacml_editor_default_roles'] = [
       '#type' => 'select',
-      '#title' => t('Roles'),
+      '#title' => $this->t('Roles'),
       '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_roles'),
       '#options' => $roles,
       '#multiple' => TRUE,

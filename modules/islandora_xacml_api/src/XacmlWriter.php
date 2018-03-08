@@ -15,7 +15,7 @@ class XacmlWriter {
    * @param array $xacml
    *   The XACML rules array to be populated by this function.
    *
-   * @return DomDocument
+   * @return \DomDocument
    *   A DomDocument containing our constructed XACML policy.
    */
   public static function toDom(array $xacml) {
