@@ -94,8 +94,10 @@ class Admin extends ConfigFormBase {
 
     // Get the user list.
     $users = [];
-    $result = db_query('SELECT u.uid, u.name FROM {users} u');
-    foreach ($result as $user) {
+    $user_storage = \Drupal::service('entity_type.manager')->getStorage('user');
+    $ids = $user_storage->getQuery()->execute();
+    foreach ($ids as $id) {
+      $user = $user_storage->load($id);
       $user->id() == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->getAccountName()] = $user->getAccountName();
       if ($user->id() == 1) {
         $admin_user = $user->getAccountName();
@@ -105,9 +107,11 @@ class Admin extends ConfigFormBase {
 
     // Get role list.
     $roles = [];
-    $result = db_query('SELECT r.rid, r.name FROM {role} r');
-    foreach ($result as $role) {
-      $role->rid == 0 ? $roles['anonymous'] = 'anonymous' : $roles[$role->name] = $role->name;
+    $role_storage = \Drupal::service('entity_type.manager')->getStorage('user_role');
+    $ids = $role_storage->getQuery()->execute();
+    foreach ($ids as $id) {
+      $role = $role_storage->load($id);
+      $roles[$role->id()] = $role->label();
     }
 
     $form['islandora_xacml_editor_defaults']['islandora_xacml_editor_default_users'] = [
