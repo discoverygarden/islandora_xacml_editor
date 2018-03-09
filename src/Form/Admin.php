@@ -29,10 +29,6 @@ class Admin extends ConfigFormBase {
     }
     $config->save();
 
-    if (method_exists($this, '_submitForm')) {
-      $this->_submitForm($form, $form_state);
-    }
-
     parent::submitForm($form, $form_state);
   }
 
@@ -43,27 +39,22 @@ class Admin extends ConfigFormBase {
     return ['islandora_xacml_editor.settings'];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
-    // @FIXME
-// The Assets API has totally changed. CSS, JavaScript, and libraries are now
-// attached directly to render arrays using the #attached property.
-//
-//
-// @see https://www.drupal.org/node/2169605
-// @see https://www.drupal.org/node/2408597
-// drupal_add_css(drupal_get_path('module', 'islandora_xacml_editor') . '/css/islandora_xacml_editor.css');
-
     $form = [];
 
+    $form['#attached']['library'][] = 'islandora_xacml_editor/xacml-editor-css';
     $form['islandora_xacml_editor_show_dsidregex'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display the DSID regex textfield?'),
-      '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex'),
+      '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex'),
     ];
     $form['islandora_xacml_editor_show_mimeregex'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display the MIME type regex textfield?'),
-      '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex'),
+      '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex'),
     ];
     $form['islandora_xacml_editor_restrictions'] = [
       '#type' => 'fieldset',
@@ -75,12 +66,12 @@ class Admin extends ConfigFormBase {
     $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_dsids'] = [
       '#type' => 'textarea',
       '#title' => $this->t('DSID'),
-      '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids'),
+      '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids'),
     ];
     $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_mimes'] = [
       '#type' => 'textarea',
       '#title' => $this->t('MIME type'),
-      '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes'),
+      '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes'),
     ];
     $form['islandora_xacml_editor_defaults'] = [
       '#type' => 'fieldset',
@@ -116,7 +107,7 @@ class Admin extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('Users'),
       '#options' => $users,
-      '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_users'),
+      '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_users'),
       '#multiple' => TRUE,
       '#size' => 10,
       '#prefix' => '<div class="islandora_xacml_selects">',
@@ -124,7 +115,7 @@ class Admin extends ConfigFormBase {
     $form['islandora_xacml_editor_defaults']['islandora_xacml_editor_default_roles'] = [
       '#type' => 'select',
       '#title' => $this->t('Roles'),
-      '#default_value' => \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_roles'),
+      '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_default_roles'),
       '#options' => $roles,
       '#multiple' => TRUE,
       '#size' => 10,
