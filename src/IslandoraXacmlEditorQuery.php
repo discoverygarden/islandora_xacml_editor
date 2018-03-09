@@ -20,7 +20,7 @@ class IslandoraXacmlEditorQuery {
    *   -query: The defined query string.
    *   -description: The human-readable description of the query.
    */
-  public function __construct($pid, $query_array) {
+  public function __construct($pid, array $query_array) {
     $this->pid = $pid;
     $this->query = $query_array;
     $this->result_pids = [];
@@ -77,6 +77,7 @@ class IslandoraXacmlEditorQuery {
 
   /**
    * Helper function that retrieves all results of our query.
+   *
    * @return array
    *   An array of the PIDs returned from the defiend query.
    */
@@ -85,4 +86,5 @@ class IslandoraXacmlEditorQuery {
     $result_pids = array_keys($this->result_pids);
     return $result_pids;
   }
+
 }

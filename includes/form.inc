@@ -5,10 +5,12 @@
  * Houses the forms used in the Islandora XACML Editor.
  */
 
+use Drupal\islandora_xacml_api\Xacml;
+
 /**
  * Retrieves the users selected in each 'Users' portion for datastream rules.
  *
- * @param Xacml $xacml
+ * @param Drupal\islandora_xacml_api\Xacml $xacml
  *   The XACML object.
  * @param bool $new_xacml
  *   Whether there already exists an XACML policy or not.
@@ -18,7 +20,7 @@
  * @return array
  *   An array of users that are selected for the specific rule.
  */
-function islandora_xacml_editor_retrieve_users($xacml, $new_xacml, $rule) {
+function islandora_xacml_editor_retrieve_users(Xacml $xacml, $new_xacml, $rule) {
   if ($new_xacml == FALSE) {
     if ($rule == 'viewing' && $xacml->viewingRule->isPopulated()) {
       return $xacml->viewingRule->getUsers();
@@ -41,7 +43,7 @@ function islandora_xacml_editor_retrieve_users($xacml, $new_xacml, $rule) {
 /**
  * Retrieves the roles selected in each 'Roles' portion for datastream rules.
  *
- * @param Xacml $xacml
+ * @param Drupal\islandora_xacml_api\Xacml $xacml
  *   The XACML object.
  * @param bool $new_xacml
  *   Whether there already exists an XACML policy or not.
@@ -51,7 +53,7 @@ function islandora_xacml_editor_retrieve_users($xacml, $new_xacml, $rule) {
  * @return array
  *   An array of roles that are selected for the specific rule.
  */
-function islandora_xacml_editor_retrieve_roles($xacml, $new_xacml, $rule) {
+function islandora_xacml_editor_retrieve_roles(Xacml $xacml, $new_xacml, $rule) {
   if ($new_xacml == FALSE) {
     if ($rule == 'viewing' && $xacml->viewingRule->isPopulated()) {
       return $xacml->viewingRule->getRoles();
@@ -81,26 +83,26 @@ function islandora_xacml_editor_retrieve_roles($xacml, $new_xacml, $rule) {
  *   An array that represents the tableselect to be rendered.
  */
 function islandora_xacml_editor_form_table(array $passed_rows) {
-  $headers = array(
+  $headers = [
     'filter' => t('Filter'),
     'type' => t('Type'),
-  );
+  ];
 
-  $rows = array();
+  $rows = [];
   foreach ($passed_rows as $key => $value) {
     $filter = $value['Filter'];
     $type = $value['Type'];
-    $rows[$key] = array(
+    $rows[$key] = [
       'filter' => $filter,
       'type' => $type,
-    );
+    ];
   }
 
-  $table = array(
+  $table = [
     '#type' => 'tableselect',
     '#header' => $headers,
     '#options' => $rows,
-  );
+  ];
   return $table;
 }
 
@@ -126,9 +128,9 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
 
   $table = $variables['table'];
   $row_elements = $table['rows'];
-  $rows = array();
+  $rows = [];
   foreach (\Drupal\Core\Render\Element::children($row_elements) as $key) {
-    $columns = array();
+    $columns = [];
     $row_element = $row_elements[$key];
     foreach (\Drupal\Core\Render\Element::children($row_element) as $key) {
       $column_element = $row_element[$key];
@@ -139,7 +141,7 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
     }
     $rows[] = $columns;
   }
-  $variables = array(
+  $variables = [
     'header' => $table['#header'],
     'rows' => $rows,
     'attributes' => $table['#attributes'],
@@ -147,7 +149,7 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
     'colgroups' => NULL,
     'sticky' => NULL,
     'empty' => t("No child collection(s)."),
-  );
+  ];
   // @FIXME
 // theme() has been renamed to _theme() and should NEVER be called directly.
 // Calling _theme() directly can alter the expected output and potentially
@@ -159,6 +161,7 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
 // return theme('table', $variables);
 
 }
+
 /**
  * AJAX callback to remove the selected filters from the rules table.
  */

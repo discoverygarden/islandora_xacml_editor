@@ -4,7 +4,6 @@ namespace Drupal\islandora_xacml_editor\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 
 use Drupal\islandora_xacml_api\IslandoraXacml;
 use Drupal\islandora_xacml_api\Xacml;
@@ -22,7 +21,10 @@ class IslandoraXacmlEditorForm extends FormBase {
     return 'islandora_xacml_editor_form';
   }
 
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $object = NULL) {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, $object = NULL) {
     // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
@@ -193,10 +195,10 @@ class IslandoraXacmlEditorForm extends FormBase {
       '#states' => [
         'visible' => [
           ':input[name="manage_enabled"]' => [
-            'checked' => TRUE
-            ]
-          ]
+            'checked' => TRUE,
+          ],
         ],
+      ],
     ];
 
     $form['manage']['users'] = [
@@ -296,13 +298,13 @@ class IslandoraXacmlEditorForm extends FormBase {
         '#states' => [
           'invisible' => [
             ':input[name="update_options"]' => [
-              'value' => 'newchildren'
-              ]
-            ]
+              'value' => 'newchildren',
+            ],
           ],
+        ],
         'markup' => [
-          '#markup' => $this->t('<strong>Warning:</strong> Overriding existing policies can break the expected behavoir of other modules which rely on full control of an objects POLICY. If any children have embargoes set by <em>Islandora Scholar Embargo</em> they will be lost when this action is committed.')
-          ],
+          '#markup' => $this->t('<strong>Warning:</strong> Overriding existing policies can break the expected behavoir of other modules which rely on full control of an objects POLICY. If any children have embargoes set by <em>Islandora Scholar Embargo</em> they will be lost when this action is committed.'),
+        ],
       ];
 
     }
@@ -356,7 +358,7 @@ class IslandoraXacmlEditorForm extends FormBase {
           }
           elseif (in_array($add_text, $restricted_dsids)) {
             drupal_set_message($this->t('The DSID @dsid was not added as it is restricted from the admin settings page!', [
-              '@dsid' => $add_text
+              '@dsid' => $add_text,
               ]), 'warning');
           }
           else {
@@ -392,7 +394,7 @@ class IslandoraXacmlEditorForm extends FormBase {
           }
           else {
             drupal_set_message($this->t('The DSID regex @regex was not added as it already exists as a filter!', [
-              '@regex' => $add_text
+              '@regex' => $add_text,
               ]), 'warning');
           }
         }
@@ -1014,6 +1016,9 @@ class IslandoraXacmlEditorForm extends FormBase {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
@@ -1078,6 +1083,9 @@ class IslandoraXacmlEditorForm extends FormBase {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $object = islandora_object_load($form_state->get(['islandora_xacml', 'pid']));
     $pid = $object->id;
@@ -1129,7 +1137,9 @@ class IslandoraXacmlEditorForm extends FormBase {
     $form_state->set(['redirect'], ['islandora/object/' . $pid]);
     if (!$form_state->get(['islandora_xacml', 'query_choices']) && $form_state->getValue(['update_options']) != 'newchildren') {
       $option = $form_state->getValue(['update_options']);
-      $query_array = $form_state->get(['islandora_xacml', 'query_choices', $option]);
+      $query_array = $form_state->get(
+        ['islandora_xacml', 'query_choices', $option]
+      );
       $xml = $xacml->getXmlString();
       $batch = [
         'title' => $this->t('Updating Policies'),
@@ -1142,8 +1152,8 @@ class IslandoraXacmlEditorForm extends FormBase {
               $pid,
               $query_array,
             ],
-          ]
           ],
+        ],
         'finished' => 'islandora_xacml_editor_batch_finished',
         'file' => drupal_get_path('module', 'islandora_xacml_editor') . '/includes/batch.inc',
       ];
@@ -1151,8 +1161,8 @@ class IslandoraXacmlEditorForm extends FormBase {
     }
     else {
       unset($form_state->get(['islandora_xacml']));
-      drupal_set_message(t('The configured POLICY datastream has been applied to @pid!', [
-        '@pid' => $pid
+      drupal_set_message($this->t('The configured POLICY datastream has been applied to @pid!', [
+        '@pid' => $pid,
         ]));
     }
   }
