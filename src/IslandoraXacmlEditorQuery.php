@@ -36,11 +36,8 @@ class IslandoraXacmlEditorQuery {
    *   -description: The human-readable description of the query.
    * @param string $object_pid
    *   The pid of the object we are using as a base for queries.
-   *
-   * @return array
-   *   An array containing the results of our query.
    */
-  public function query($query_array, $object_pid) {
+  public function query(array $query_array, $object_pid) {
     module_load_include('inc', 'islandora', 'includes/utilities');
     $object = islandora_object_load($object_pid);
     if ($query_array['type'] == 'itql') {

@@ -6,6 +6,7 @@
  */
 
 use Drupal\islandora_xacml_api\Xacml;
+use Drupal\Core\Render\Element;
 
 /**
  * Retrieves the users selected in each 'Users' portion for datastream rules.
@@ -129,13 +130,13 @@ function theme_islandora_xacml_editor_policy_management_table(array $variables) 
   $table = $variables['table'];
   $row_elements = $table['rows'];
   $rows = [];
-  foreach (\Drupal\Core\Render\Element::children($row_elements) as $key) {
+  foreach (Element::children($row_elements) as $key) {
     $columns = [];
     $row_element = $row_elements[$key];
-    foreach (\Drupal\Core\Render\Element::children($row_element) as $key) {
+    foreach (Element::children($row_element) as $key) {
       $column_element = $row_element[$key];
       $columns[] = array(
-        'data' => \Drupal::service("renderer")->render($column_element),
+        'data' => \Drupal::service('renderer')->render($column_element),
         'class' => isset($cell_element['#attributes']['class']) ? $column_element['#attributes']['class'] : NULL,
       );
     }

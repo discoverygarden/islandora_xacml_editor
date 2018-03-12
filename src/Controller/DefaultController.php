@@ -28,7 +28,7 @@ class DefaultController extends ControllerBase {
         $output[$datastream->id] = Html::escape($datastream->id);
       }
     }
-    $restricted_dsids = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
+    $restricted_dsids = $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
     $restricted_dsids = preg_split('/[\s,]+/', $restricted_dsids);
 
     $output = array_diff($output, $restricted_dsids);
@@ -63,7 +63,7 @@ class DefaultController extends ControllerBase {
         $output[$key] = Html::escape($key);
       }
     }
-    $restricted_mimes = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
+    $restricted_mimes = $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
     $restricted_mimes = preg_split('/[\s,]+/', $restricted_mimes);
 
     $output = array_diff($output, $restricted_mimes);

@@ -4,6 +4,7 @@ namespace Drupal\islandora_xacml_editor\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 use Drupal\islandora_xacml_api\IslandoraXacml;
 use Drupal\islandora_xacml_api\Xacml;
@@ -44,7 +45,6 @@ class IslandoraXacmlEditorForm extends FormBase {
     //
     // @see https://www.drupal.org/node/2067859
     // drupal_set_title(t('Islandora XACML Editor'));
-
 
     if ($form_state->get(['islandora_xacml'])) {
       $form_state->set(['islandora_xacml'], []);
@@ -187,7 +187,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       '#weight' => -1,
       '#type' => 'fieldset',
       '#title' => $this->t('Object Management'),
-      '#description' => 'Select the Users and Roles that are allowed to manage this object. These users will also be able to view the object even if not explicitly allowed to in the object access section. WARNING: If you unselect yourself you will be locked out of the object.',
+      '#description' => $this->t('Select the Users and Roles that are allowed to manage this object. These users will also be able to view the object even if not explicitly allowed to in the object access section. WARNING: If you unselect yourself you will be locked out of the object.'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
       '#states' => [
@@ -234,10 +234,10 @@ class IslandoraXacmlEditorForm extends FormBase {
       '#states' => [
         'visible' => [
           ':input[name="dsid_mime_enabled"]' => [
-            'checked' => TRUE
-            ]
-          ]
+            'checked' => TRUE,
+          ],
         ],
+      ],
     ];
 
     // Grab the original value to be used in comparisons.
@@ -262,8 +262,8 @@ class IslandoraXacmlEditorForm extends FormBase {
           $query_choices['flat_collection'] = $query_choices['all_children'];
           $query_choices['flat_collection']['description'] = $this->t('All immediate children of the collection (shallow traversal)');
           $query_choices['flat_collection']['restricted_cmodels'] = [
-            'islandora:collectionCModel'
-            ];
+            'islandora:collectionCModel',
+          ];
         }
       }
     }
@@ -271,8 +271,8 @@ class IslandoraXacmlEditorForm extends FormBase {
     if (!empty($query_choices)) {
       // The "newchildren" option is applied automatically through ingest steps.
       $update_options = [
-        'newchildren' => $this->t('New children of this object.')
-        ];
+        'newchildren' => $this->t('New children of this object.'),
+      ];
       foreach ($query_choices as $key => $query) {
         $form_state->set(['islandora_xacml', 'query_choices', $key], $query);
         $update_options[$key] = $query['description'];
@@ -357,12 +357,12 @@ class IslandoraXacmlEditorForm extends FormBase {
           elseif (in_array($add_text, $restricted_dsids)) {
             drupal_set_message($this->t('The DSID @dsid was not added as it is restricted from the admin settings page!', [
               '@dsid' => $add_text,
-              ]), 'warning');
+            ]), 'warning');
           }
           else {
             drupal_set_message($this->t('The DSID @dsid was not added as it already exists as a filter!', [
               '@dsid' => $add_text
-              ]), 'warning');
+            ]), 'warning');
           }
         }
         else {
@@ -393,14 +393,14 @@ class IslandoraXacmlEditorForm extends FormBase {
           else {
             drupal_set_message($this->t('The DSID regex @regex was not added as it already exists as a filter!', [
               '@regex' => $add_text,
-              ]), 'warning');
+            ]), 'warning');
           }
         }
         else {
           drupal_set_message($this->t('No DSID regex value entered!'), 'error');
         }
       }
-        // Add MIME Regex.
+      // Add MIME Regex.
       elseif ($form_state->getTriggeringElement() == 'mime_regex_add_button' || $form_state->getTriggeringElement() == 'mime_regex_add_textfield') {
         // Store and checks.
         if ($form_state->get([
@@ -428,14 +428,14 @@ class IslandoraXacmlEditorForm extends FormBase {
           else {
             drupal_set_message($this->t('The MIME type regex @regex was not added as it already exists as a filter!', [
               '@regex' => $add_text
-              ]), 'warning');
+            ]), 'warning');
           }
         }
         else {
           drupal_set_message($this->t('No MIME type regex value entered!'), 'error');
         }
       }
-        // Add MIME type.
+      // Add MIME type.
       elseif ($form_state->getTriggeringElement() == 'mime_add_button' || $form_state->getTriggeringElement() == 'mime_add_textfield') {
         if ($form_state->get(['islandora_xacml', 'add_mime'])) {
           $form_state->set(['islandora_xacml', 'add_mime'], []);
@@ -457,13 +457,13 @@ class IslandoraXacmlEditorForm extends FormBase {
           }
           elseif (in_array($add_text, $restricted_mimes)) {
             drupal_set_message($this->t('The MIME type @mime was not added as it is restricted from the admin settings page!', [
-              '@mime' => $add_text
-              ]), 'warning');
+              '@mime' => $add_text,
+            ]), 'warning');
           }
           else {
             drupal_set_message($this->t('The MIME type @mime was not added as it already exists as a filter!', [
-              '@mime' => $add_text
-              ]), 'warning');
+              '@mime' => $add_text,
+            ]), 'warning');
           }
         }
         else {
@@ -493,8 +493,8 @@ class IslandoraXacmlEditorForm extends FormBase {
         }
 
         $remove_output = \Drupal::translation()->formatPlural($remove_count, '@filter_count applied filter was removed.', '@filter_count applied filters were removed.', [
-          '@filter_count' => $remove_count
-          ]);
+          '@filter_count' => $remove_count,
+        ]);
         drupal_set_message($remove_output);
       }
       elseif ($form_state->getTriggeringElement() == 'islandora_xacml_editor_remove_selected') {
@@ -547,7 +547,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       foreach ($form_state->get(['islandora_xacml', 'remove_dsid']) as $value) {
         $key = array_search($value, $temp_dsid);
 
-        // If the value is not one of our 'hidden DSIDs'
+        // If the value is not one of our 'hidden DSIDs'.
         if (is_numeric($key)) {
           $xacml->datastreamRule->removeDsid($temp_dsid[$key]);
           $form_state->set(['islandora_xacml', 'hidden_dsids'], $value);
@@ -560,18 +560,18 @@ class IslandoraXacmlEditorForm extends FormBase {
           ]));
 
           if (is_numeric($search)) {
-            unset($form_state->get(['islandora_xacml', 'add_dsid', $search]));
+            $form_state->set(['islandora_xacml', 'add_dsid', $search], NULL);
           }
         }
       }
-      unset($form_state->get(['islandora_xacml', 'remove_dsid']));
+      $form_state->set(['islandora_xacml', 'remove_dsid'], NULL);
     }
 
     if (!$form_state->get(['islandora_xacml', 'remove_mime'])) {
       foreach ($form_state->get(['islandora_xacml', 'remove_mime']) as $value) {
         $key = array_search($value, $temp_mime);
 
-        // If the value is not one of our 'hidden mimes'
+        // If the value is not one of our 'hidden mimes'.
         if (is_numeric($key)) {
           $xacml->datastreamRule->removeMimetype($temp_mime[$key]);
           $form_state->set(['islandora_xacml', 'hidden_mimes'], $value);
@@ -595,7 +595,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       foreach ($form_state->get(['islandora_xacml', 'remove_mime_regex']) as $value) {
         $key = array_search($value, $temp_mime_regexs);
 
-        // If the value is not one of our 'hidden mime regexs'
+        // If the value is not one of our 'hidden mime regexs'.
         if (is_numeric($key)) {
           $xacml->datastreamRule->removeMimetypeRegex($temp_mime_regexs[$key]);
           $form_state->set(['islandora_xacml', 'hidden_mime_regexs'], $value);
@@ -619,7 +619,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       foreach ($form_state->get(['islandora_xacml', 'remove_dsid_regex']) as $value) {
         $key = array_search($value, $temp_dsid_regexs);
 
-        // If the value is not one of our 'hidden mimes'
+        // If the value is not one of our 'hidden mimes'.
         if (is_numeric($key)) {
           $xacml->datastreamRule->removeDsidRegex($temp_dsid_regexs[$key]);
           $form_state->set(['islandora_xacml', 'hidden_dsid_regexs'], $value);
@@ -674,7 +674,7 @@ class IslandoraXacmlEditorForm extends FormBase {
     $temp_mime_regexs = $xacml->datastreamRule->getMimetypeRegexs();
     $temp_dsid_regexs = $xacml->datastreamRule->getDsidRegexs();
 
-    // Add any values we are carrying in the form storage to the datastream rules.
+    // Add values we are carrying in the form storage to the datastream rules.
     if (!$form_state->get([
       'islandora_xacml',
       'add_dsid',
@@ -928,7 +928,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       $form['dsid_mime']['dsid_regex'] = [
         '#type' => 'textfield',
         '#title' => $this->t('DSID Regex'),
-        '#description' => \Drupal::l($this->t('XML regex'), \Drupal\Core\Url::fromUri('http://www.w3.org/TR/xmlschema-0/#regexAppendix')),
+        '#description' => \Drupal::l($this->t('XML regex'), Url::fromUri('http://www.w3.org/TR/xmlschema-0/#regexAppendix')),
         '#size' => 35,
         '#prefix' => '<div class="islandora_xacml_block">',
         '#name' => 'dsid_regex_add_textfield',
@@ -982,7 +982,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       $form['dsid_mime']['mime_regex'] = [
         '#type' => 'textfield',
         '#title' => $this->t('MIME type Regex'),
-        '#description' => \Drupal::l($this->t('XML regex'), \Drupal\Core\Url::fromUri('http://www.w3.org/TR/xmlschema-0/#regexAppendix')),
+        '#description' => \Drupal::l($this->t('XML regex'), Url::fromUri('http://www.w3.org/TR/xmlschema-0/#regexAppendix')),
         '#size' => 35,
         '#prefix' => '<div class="islandora_xacml_block">',
         '#name' => 'mime_regex_add_textfield',
@@ -1017,7 +1017,7 @@ class IslandoraXacmlEditorForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
@@ -1084,7 +1084,7 @@ class IslandoraXacmlEditorForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $object = islandora_object_load($form_state->get(['islandora_xacml', 'pid']));
     $pid = $object->id;
     $xacml = new IslandoraXacml($object);
@@ -1161,7 +1161,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       unset($form_state->get(['islandora_xacml']));
       drupal_set_message($this->t('The configured POLICY datastream has been applied to @pid!', [
         '@pid' => $pid,
-        ]));
+      ]));
     }
   }
 
