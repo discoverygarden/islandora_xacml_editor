@@ -11,6 +11,6 @@ islandora_xacml_editor.settings:
     islandora_xacml_editor_show_mimeregex:
       type: integer
     islandora_xacml_editor_default_users:
-      type: string
+      type: sequence
     islandora_xacml_editor_default_roles:
-      type: string
+      type: sequence

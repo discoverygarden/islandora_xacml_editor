@@ -71,7 +71,6 @@ class IslandoraXacmlEditorForm extends FormBase {
       $user = $user_storage->load($id);
       $user->id() == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->getAccountName()] = $user->getAccountName();
       if ($user->id() == 1) {
-        $admin_user = $user->getAccountName();
         $form_state->set(['islandora_xacml', 'admin_user'], $user->getAccountName());
       }
     }
@@ -107,16 +106,15 @@ class IslandoraXacmlEditorForm extends FormBase {
           drupal_set_message($this->t('The datastream XACML policy is not valid.'), 'error');
         }
       }
-
-        catch (XacmlException $e) {
+      catch (XacmlException $e) {
         \Drupal::logger('islandora_xacml_editor')->error('Exception in Islandora Xacml: @message', [
           '@message',
           $e->getMessage(),
         ]);
         drupal_set_message($e->getMessage());
         drupal_set_message($this->t("Xacml Parser failed to parse @object_pid. It is likely this POLICY wasn't written by the islandora XACML editor, it will have to be modified by hand.", [
-          "@object_pid" => $object->id
-          ]));
+          "@object_pid" => $object->id,
+        ]));
         drupal_not_found();
         exit();
       }
@@ -143,10 +141,10 @@ class IslandoraXacmlEditorForm extends FormBase {
       '#states' => [
         'visible' => [
           ':input[name="access_enabled"]' => [
-            'checked' => TRUE
-            ]
-          ]
+            'checked' => TRUE,
+          ],
         ],
+      ],
     ];
 
     $form['access']['users'] = [

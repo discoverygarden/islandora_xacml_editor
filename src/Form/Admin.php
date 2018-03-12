@@ -3,13 +3,36 @@
 namespace Drupal\islandora_xacml_editor\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Module settings form.
  */
 class Admin extends ConfigFormBase {
+
+  protected $entityTypeManager;
+
+  /**
+   * Class constructor.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($config_factory);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -24,9 +47,13 @@ class Admin extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('islandora_xacml_editor.settings');
 
-    foreach (Element::children($form) as $variable) {
-      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
-    }
+    $config->set('islandora_xacml_editor_show_dsidregex', $form_state->getValue('islandora_xacml_editor_show_dsidregex'));
+    $config->set('islandora_xacml_editor_show_mimeregex', $form_state->getValue('islandora_xacml_editor_show_mimeregex'));
+    $config->set('islandora_xacml_editor_restricted_dsids', $form_state->getValue('islandora_xacml_editor_restricted_dsids'));
+    $config->set('islandora_xacml_editor_restricted_mimes', $form_state->getValue('islandora_xacml_editor_restricted_mimes'));
+    $config->set('islandora_xacml_editor_default_users', $form_state->getValue('islandora_xacml_editor_default_users'));
+    $config->set('islandora_xacml_editor_default_roles', $form_state->getValue('islandora_xacml_editor_default_roles'));
+
     $config->save();
 
     parent::submitForm($form, $form_state);
@@ -42,7 +69,7 @@ class Admin extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
 
     $form['#attached']['library'][] = 'islandora_xacml_editor/xacml-editor-css';
@@ -61,7 +88,7 @@ class Admin extends ConfigFormBase {
       '#title' => $this->t('Restrictions for DSID and MIME type'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#description' => 'DSIDs and MIMEs that will not appear in the autocomplete fields or be allowed as filters.',
+      '#description' => $this->t('DSIDs and MIMEs that will not appear in the autocomplete fields or be allowed as filters.'),
     ];
     $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_dsids'] = [
       '#type' => 'textarea',
@@ -83,20 +110,16 @@ class Admin extends ConfigFormBase {
 
     // Get the user list.
     $users = [];
-    $user_storage = \Drupal::service('entity_type.manager')->getStorage('user');
+    $user_storage = $this->entityTypeManager->getStorage('user');
     $ids = $user_storage->getQuery()->execute();
     foreach ($ids as $id) {
       $user = $user_storage->load($id);
       $user->id() == 0 ? $users['anonymous'] = 'anonymous' : $users[$user->getAccountName()] = $user->getAccountName();
-      if ($user->id() == 1) {
-        $admin_user = $user->getAccountName();
-        $form_state->set(['islandora_xacml', 'admin_user'], $user->getAccountName());
-      }
     }
 
     // Get role list.
     $roles = [];
-    $role_storage = \Drupal::service('entity_type.manager')->getStorage('user_role');
+    $role_storage = $this->entityTypeManager->getStorage('user_role');
     $ids = $role_storage->getQuery()->execute();
     foreach ($ids as $id) {
       $role = $role_storage->load($id);
