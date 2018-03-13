@@ -133,11 +133,10 @@ class IslandoraXacmlEditorForm extends FormBase {
     ];
 
     $form['access'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
+      '#open' => TRUE,
       '#title' => $this->t('Object Viewing'),
       '#tree' => TRUE,
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
       '#states' => [
         'visible' => [
           ':input[name="access_enabled"]' => [
@@ -185,11 +184,10 @@ class IslandoraXacmlEditorForm extends FormBase {
 
     $form['manage'] = [
       '#weight' => -1,
-      '#type' => 'fieldset',
+      '#type' => 'details',
+      '#open' => TRUE,
       '#title' => $this->t('Object Management'),
       '#description' => $this->t('Select the Users and Roles that are allowed to manage this object. These users will also be able to view the object even if not explicitly allowed to in the object access section. WARNING: If you unselect yourself you will be locked out of the object.'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
       '#states' => [
         'visible' => [
           ':input[name="manage_enabled"]' => [
@@ -226,11 +224,10 @@ class IslandoraXacmlEditorForm extends FormBase {
     ];
 
     $form['dsid_mime'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
+      '#open' => TRUE,
       '#title' => $this->t('Datastreams and MIME types'),
-      '#collapsible' => TRUE,
       '#tree' => TRUE,
-      '#collapsed' => FALSE,
       '#states' => [
         'visible' => [
           ':input[name="dsid_mime_enabled"]' => [

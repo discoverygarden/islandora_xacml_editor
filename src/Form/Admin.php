@@ -84,10 +84,9 @@ class Admin extends ConfigFormBase {
       '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex'),
     ];
     $form['islandora_xacml_editor_restrictions'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
+      '#open' => FALSE,
       '#title' => $this->t('Restrictions for DSID and MIME type'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
       '#description' => $this->t('DSIDs and MIMEs that will not appear in the autocomplete fields or be allowed as filters.'),
     ];
     $form['islandora_xacml_editor_restrictions']['islandora_xacml_editor_restricted_dsids'] = [
@@ -101,10 +100,9 @@ class Admin extends ConfigFormBase {
       '#default_value' => $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes'),
     ];
     $form['islandora_xacml_editor_defaults'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
+      '#open' => FALSE,
       '#title' => $this->t('Default users and roles'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
       '#description' => $this->t('The users and roles that will appear as the default selected unless there is a existing XACML policy attached to an object.'),
     ];
 

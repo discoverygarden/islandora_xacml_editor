@@ -108,7 +108,7 @@ function islandora_xacml_editor_form_table(array $passed_rows) {
 }
 
 /**
- * Theme the xacml policy management table.
+ * Theme the XACML policy management table.
  *
  * @param array $variables
  *   Variables passed to this theme function.
@@ -116,51 +116,33 @@ function islandora_xacml_editor_form_table(array $passed_rows) {
  * @return string
  *   Markup representing the table for rendering.
  */
-function theme_islandora_xacml_editor_policy_management_table(array $variables) {
-  // Manually add the table select javascript as we are using a custom table.
-  // @FIXME
-// The Assets API has totally changed. CSS, JavaScript, and libraries are now
-// attached directly to render arrays using the #attached property.
-//
-//
-// @see https://www.drupal.org/node/2169605
-// @see https://www.drupal.org/node/2408597
-// drupal_add_js('misc/tableselect.js');
+function islandora_xacml_editor_policy_management_table(array $variables) {
+  $row_elements = $variables['table']['rows'];
 
-  $table = $variables['table'];
-  $row_elements = $table['rows'];
   $rows = [];
   foreach (Element::children($row_elements) as $key) {
     $columns = [];
     $row_element = $row_elements[$key];
     foreach (Element::children($row_element) as $key) {
       $column_element = $row_element[$key];
-      $columns[] = array(
+      $columns[] = [
         'data' => \Drupal::service('renderer')->render($column_element),
-        'class' => isset($cell_element['#attributes']['class']) ? $column_element['#attributes']['class'] : NULL,
-      );
+      ];
     }
     $rows[] = $columns;
   }
-  $variables = [
-    'header' => $table['#header'],
-    'rows' => $rows,
-    'attributes' => $table['#attributes'],
+  $return = [
+    '#type' => 'table',
+    '#header' => $variables['table']['#header'],
+    '#attached' => ['library' => ['core/drupal.tableselect']],
+    '#rows' => $rows,
+    '#attributes' => $variables['table']['#attributes'],
     'caption' => NULL,
     'colgroups' => NULL,
     'sticky' => NULL,
-    'empty' => t("No child collection(s)."),
+    '#empty' => t('No child collection(s).'),
   ];
-  // @FIXME
-// theme() has been renamed to _theme() and should NEVER be called directly.
-// Calling _theme() directly can alter the expected output and potentially
-// introduce security issues (see https://www.drupal.org/node/2195739). You
-// should use renderable arrays instead.
-//
-//
-// @see https://www.drupal.org/node/2195739
-// return theme('table', $variables);
-
+  return \Drupal::service('renderer')->render($return);
 }
 
 /**
