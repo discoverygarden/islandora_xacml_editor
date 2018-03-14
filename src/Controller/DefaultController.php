@@ -3,6 +3,7 @@
 namespace Drupal\islandora_xacml_editor\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 
@@ -16,24 +17,28 @@ class DefaultController extends ControllerBase {
    */
   public function dsidAutocomplete($pid, $string) {
     $object = islandora_object_load($pid);
-    $output = [];
+    $dsids = [];
 
     foreach ($object as $datastream) {
       if ($string != '*') {
         if (strpos(Unicode::strtoupper($datastream->id), Unicode::strtoupper($string)) !== FALSE) {
-          $output[$datastream->id] = Html::escape($datastream->id);
+          $dsids[$datastream->id] = Html::escape($datastream->id);
         }
       }
       else {
-        $output[$datastream->id] = Html::escape($datastream->id);
+        $dsids[$datastream->id] = Html::escape($datastream->id);
       }
     }
     $restricted_dsids = $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
     $restricted_dsids = preg_split('/[\s,]+/', $restricted_dsids);
 
-    $output = array_diff($output, $restricted_dsids);
+    $dsids = array_diff($dsids, $restricted_dsids);
 
-    drupal_json_output($output);
+    $output = [];
+    foreach ($dsids as $dsid => $escaped_dsid) {
+      $output[] = ['value' => $dsid, 'label' => $escaped_dsid];
+    }
+    return new JsonResponse($output);
   }
 
   /**
@@ -42,7 +47,7 @@ class DefaultController extends ControllerBase {
   public function mimeAutocomplete($pid, $string) {
     module_load_include('inc', 'islandora', 'includes/utilities');
 
-    $output = [];
+    $mimes = [];
     $object = islandora_object_load($pid);
 
     if ($object['COLLECTION_POLICY']) {
@@ -56,20 +61,23 @@ class DefaultController extends ControllerBase {
     foreach ($mime as $key => $value) {
       if ($string != "*") {
         if (strpos(Unicode::strtoupper($key), Unicode::strtoupper($string)) !== FALSE) {
-          $output[$key] = Html::escape($key);
+          $mimes[$key] = Html::escape($key);
         }
       }
       else {
-        $output[$key] = Html::escape($key);
+        $mimes[$key] = Html::escape($key);
       }
     }
     $restricted_mimes = $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
     $restricted_mimes = preg_split('/[\s,]+/', $restricted_mimes);
 
-    $output = array_diff($output, $restricted_mimes);
+    $mimes = array_diff($mimes, $restricted_mimes);
+    $output = [];
+    foreach ($mimes as $mime => $escaped_mime) {
+      $output[] = ['value' => $mime, 'label' => $escaped_mime];
+    }
 
-    drupal_json_output($output);
-
+    return new JsonResponse($output);
   }
 
 }
