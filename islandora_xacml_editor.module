@@ -7,8 +7,6 @@
 
 use Drupal\Core\Form\FormStateInterface;
 
-use Drupal\islandora_xacml_api\IslandoraXacml;
-
 // Permission.
 // @codingStandardsIgnoreLine
 const ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION = 'administer xacml inheritance';
@@ -40,15 +38,6 @@ function islandora_xacml_editor_menu() {
     'access callback' => 'islandora_xacml_editor_access',
     'access arguments' => array(2),
     'file' => 'includes/form.inc',
-  );
-  $items['admin/islandora/tools/xacml/editor'] = array(
-    'title' => 'Islandora XACML Editor',
-    'description' => 'Settings for the Islandora XACML module.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('islandora_xacml_editor_settings'),
-    'access arguments' => array('administer islandora_xacml_editor'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'includes/admin.inc',
   );
   // We use %menu_tail to get around some of the issues that can arise with
   // users entering input for autocomplete. For example slashes would break.

@@ -4,7 +4,12 @@ namespace Drupal\islandora_xacml_editor\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Url;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Drupal\islandora_xacml_api\IslandoraXacml;
 use Drupal\islandora_xacml_api\Xacml;
@@ -14,6 +19,27 @@ use Drupal\islandora_xacml_api\XacmlException;
  * The XACML editing form.
  */
 class IslandoraXacmlEditorForm extends FormBase {
+
+  protected $entityTypeManager;
+  protected $config;
+
+  /**
+   * Class constructor.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+    $this->config = $config_factory;
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -65,7 +91,7 @@ class IslandoraXacmlEditorForm extends FormBase {
 
     // Get the user list.
     $users = [];
-    $user_storage = \Drupal::service('entity_type.manager')->getStorage('user');
+    $user_storage = $this->entityTypeManager->getStorage('user');
     $ids = $user_storage->getQuery()->execute();
     foreach ($ids as $id) {
       $user = $user_storage->load($id);
@@ -80,7 +106,7 @@ class IslandoraXacmlEditorForm extends FormBase {
 
     // Get role list.
     $roles = [];
-    $role_storage = \Drupal::service('entity_type.manager')->getStorage('user_role');
+    $role_storage = $this->entityTypeManager->getStorage('user_role');
     $ids = $role_storage->getQuery()->execute();
     foreach ($ids as $id) {
       $role = $role_storage->load($id);
@@ -339,7 +365,7 @@ class IslandoraXacmlEditorForm extends FormBase {
         $add_text = trim($form_state->getUserInput());
 
         if (!empty($add_text) && !ctype_space($add_text)) {
-          $restricted_dsids = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
+          $restricted_dsids = $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_dsids');
           $restricted_dsids = preg_split('/[\s,]+/', $restricted_dsids);
 
           if (!(!$form_state->get(['islandora_xacml', 'add_dsid']) && in_array($add_text, $form_state->get([
@@ -424,7 +450,7 @@ class IslandoraXacmlEditorForm extends FormBase {
           }
           else {
             drupal_set_message($this->t('The MIME type regex @regex was not added as it already exists as a filter!', [
-              '@regex' => $add_text
+              '@regex' => $add_text,
             ]), 'warning');
           }
         }
@@ -440,7 +466,7 @@ class IslandoraXacmlEditorForm extends FormBase {
 
         $add_text = $form_state->getUserInput();
         if (!empty($add_text) && !ctype_space($add_text)) {
-          $restricted_mimes = \Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
+          $restricted_mimes = $this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_restricted_mimes');
           $restricted_mimes = preg_split('/[\s,]+/', $restricted_mimes);
 
           if (!(!$form_state->get(['islandora_xacml', 'add_mime']) && in_array($add_text, $form_state->get([
@@ -471,7 +497,7 @@ class IslandoraXacmlEditorForm extends FormBase {
         $remove_count = 0;
 
         foreach ($form_state->get(['islandora_xacml', 'rows']) as $key => $value) {
-          $type = \Drupal\Component\Utility\Unicode::strtolower($value['Type']);
+          $type = Unicode::strtolower($value['Type']);
           $filter = $value['Filter'];
 
           if ($type == 'dsid') {
@@ -524,8 +550,8 @@ class IslandoraXacmlEditorForm extends FormBase {
             $remove_count++;
           }
           $remove_output = \Drupal::translation()->formatPlural($remove_count, '@filter_count applied filter was removed.', '@filter_count applied filters were removed.', [
-            '@filter_count' => $remove_count
-            ]);
+            '@filter_count' => $remove_count,
+          ]);
           drupal_set_message($remove_output);
         }
         else {
@@ -921,7 +947,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       ],
     ];
 
-    if (\Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex')) {
+    if ($this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_dsidregex')) {
       $form['dsid_mime']['dsid_regex'] = [
         '#type' => 'textfield',
         '#title' => $this->t('DSID Regex'),
@@ -975,7 +1001,7 @@ class IslandoraXacmlEditorForm extends FormBase {
       ],
     ];
 
-    if (\Drupal::config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex')) {
+    if ($this->config('islandora_xacml_editor.settings')->get('islandora_xacml_editor_show_mimeregex')) {
       $form['dsid_mime']['mime_regex'] = [
         '#type' => 'textfield',
         '#title' => $this->t('MIME type Regex'),

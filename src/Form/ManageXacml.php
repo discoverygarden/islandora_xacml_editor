@@ -6,6 +6,10 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Render\RendererInterface;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Drupal\islandora_xacml_api\IslandoraXacml;
 use AbstractObject;
@@ -14,6 +18,27 @@ use AbstractObject;
  * Upload form when ingesting PDF objects.
  */
 class ManageXacml extends FormBase {
+
+  protected $moduleHandler;
+  protected $renderer;
+
+  /**
+   * Class constructor.
+   */
+  public function __construct(ModuleHandlerInterface $module_handler, RendererInterface $renderer) {
+    $this->moduleHandler = $module_handler;
+    $this->renderer = $renderer;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler'),
+      $container->get('renderer')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -29,14 +54,14 @@ class ManageXacml extends FormBase {
    *   The Drupal form definition.
    * @param Drupal\Core\Form\FormStateInterface $form_state
    *   The Drupal form state.
-   * @param AbstractObject $object
+   * @param \AbstractObject $object
    *   The collection to move child objects from.
    *
    * @return array
    *   The Drupal form definition.
    */
   public function buildForm(array $form, FormStateInterface $form_state, AbstractObject $object = NULL) {
-    if (\Drupal::moduleHandler()->moduleExists('islandora_basic_collection')) {
+    if ($this->moduleHandler->moduleExists('islandora_basic_collection')) {
       module_load_include('inc', 'islandora', 'includes/utilities');
       // Hard code the XACML pager element because it needs to be unique.
       $pager_element = 3;
@@ -64,8 +89,8 @@ class ManageXacml extends FormBase {
             '#markup' => Link::createFromRoute(
               $this->t('@label (@pid)', ['@label' => $child_collection->label, '@pid' => $pid]),
               'islandora.view_object',
-              ['object' => $pid])
-            ->toString(),
+              ['object' => $pid]
+            )->toString(),
           ],
           'parents' => [
             '#type' => 'select',
@@ -79,7 +104,7 @@ class ManageXacml extends FormBase {
         '#quantity' => 20,
         '#element' => $pager_element,
       ];
-      $pager = \Drupal::service('renderer')->render($pager_element);
+      $pager = $this->renderer->render($pager_element);
       $pager = islandora_basic_collection_append_fragment_to_pager_url($pager, '#manage-xacml');
       return [
         '#action' => Url::fromRoute(
@@ -141,11 +166,13 @@ class ManageXacml extends FormBase {
             $xacml->writeBackToFedora();
             drupal_set_message($this->t('@child now inherits XACML from @parent.', [
               '@child' => $object->id,
-              '@parent' => $parent_object->id]), 'status');
+              '@parent' => $parent_object->id,
+            ]), 'status');
           }
           else {
             drupal_set_message($this->t('@parent does not have an XACML policy.', [
-              '@parent' => $parent_object->id]), 'status');
+              '@parent' => $parent_object->id,
+            ]), 'status');
           }
         }
         else {
