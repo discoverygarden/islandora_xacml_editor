@@ -3,9 +3,15 @@
 namespace Drupal\islandora_xacml_editor\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Html;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Drupal\islandora_basic_collection\CollectionPolicy;
+
+use AbstractObject;
 
 /**
  * Default controller for the islandora_xacml_editor module.
@@ -15,8 +21,8 @@ class DefaultController extends ControllerBase {
   /**
    * Callback that performs autocomplete operations.
    */
-  public function dsidAutocomplete($pid, $string) {
-    $object = islandora_object_load($pid);
+  public function dsidAutocomplete(AbstractObject $object, Request $request) {
+    $string = $request->query->get('q');
     $dsids = [];
 
     foreach ($object as $datastream) {
@@ -44,12 +50,11 @@ class DefaultController extends ControllerBase {
   /**
    * Callback that performs autocomplete operations.
    */
-  public function mimeAutocomplete($pid, $string) {
-    module_load_include('inc', 'islandora', 'includes/utilities');
+  public function mimeAutocomplete(AbstractObject $object, Request $request) {
+    module_load_include('inc', 'islandora_xacml_editor', 'includes/autocomplete');
 
+    $string = $request->query->get('q');
     $mimes = [];
-    $object = islandora_object_load($pid);
-
     if ($object['COLLECTION_POLICY']) {
       $collection_policy = new CollectionPolicy($object['COLLECTION_POLICY']->content);
       $collection_models = array_keys($collection_policy->getContentModels());

@@ -7,3 +7,25 @@ islandora_xacml_editor.admin:
     _admin_route: TRUE
   requirements:
     _permission: 'administer islandora_xacml_editor'
+islandora_xacml_editor.dsidautocomplete:
+  path: '/islandora/xacml/dsidautocomplete/{object}'
+  defaults:
+    _title: 'Autocomplete callback'
+    _controller: '\Drupal\islandora_xacml_editor\Controller\DefaultController::dsidAutocomplete'
+  options:
+    parameters:
+      object:
+        type: object
+  requirements:
+    _permission: 'administer islandora_xacml_editor'
+islandora_xacml_editor.mimeautocomplete:
+  path: '/islandora/xacml/mimeautocomplete/{object}'
+  defaults:
+    _title: 'Autocomplete callback'
+    _controller: '\Drupal\islandora_xacml_editor\Controller\DefaultController::mimeAutocomplete'
+  options:
+    parameters:
+      object:
+        type: object
+  requirements:
+    _permission: 'administer islandora_xacml_editor'
