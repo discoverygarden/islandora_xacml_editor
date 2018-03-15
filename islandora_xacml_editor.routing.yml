@@ -3,5 +3,7 @@ islandora_xacml_editor.admin:
   defaults:
     _title: 'Islandora XACML Editor'
     _form: '\Drupal\islandora_xacml_editor\Form\Admin'
+  options:
+    _admin_route: TRUE
   requirements:
     _permission: 'administer islandora_xacml_editor'

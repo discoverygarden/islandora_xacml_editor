@@ -3,5 +3,7 @@ islandora_xacml_api.admin:
   defaults:
     _title: 'Islandora XACML API'
     _form: '\Drupal\islandora_xacml_api\Form\Admin'
+  options:
+    _admin_route: TRUE
   requirements:
     _permission: 'administer islandora_xacml_api'
