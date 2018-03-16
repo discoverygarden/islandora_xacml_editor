@@ -2,8 +2,11 @@
 
 namespace Drupal\islandora_xacml_api;
 
-use DomDocument;
-use DomXpath;
+use Drupal\Component\Utility\Unicode;
+
+use DOMDocument;
+use DOMElement;
+use DOMXpath;
 
 /**
  * This class parses XACML into datastructures used by the XACML class.
@@ -60,7 +63,7 @@ class XacmlParser {
    *
    * @param array $rule
    *   The rule datastructure to add the ['dsids'] and ['mimes'] arrays to.
-   * @param DOMElement $element
+   * @param \DOMElement $element
    *   The DOMElement for the <Rule> tag being parsed.
    */
   protected static function findDsidMime(array &$rule, DOMElement $element) {
@@ -98,7 +101,7 @@ class XacmlParser {
    *
    * @param array $rule
    *   The rule datastructure to add the ['methods'] array to.
-   * @param DOMElement $element
+   * @param \DOMElement $element
    *   The DOMElement for the <Rule> tag being parsed.
    */
   protected static function findMethods(array &$rule, DOMElement $element) {
@@ -127,9 +130,9 @@ class XacmlParser {
    *
    * @param array $rule
    *   The rule to add the ['roles'] array to.
-   * @param DOMElement $element
+   * @param \DOMElement $element
    *   The <Rule> DOMElement.
-   * @param DOMXPath $xpath
+   * @param \DOMXPath $xpath
    *   An DOMXPath class instantiated for this DOMDocument.
    */
   protected static function findRoles(array &$rule, DOMElement $element, DOMXPath $xpath) {
@@ -150,9 +153,9 @@ class XacmlParser {
    *
    * @param array $rule
    *   The rule to add the ['users'] array to.
-   * @param DOMElement $element
+   * @param \DOMElement $element
    *   The <Rule> DOMElement.
-   * @param DOMXPath $xpath
+   * @param \DOMXPath $xpath
    *   An DOMXPath class instantiated for this DOMDocument.
    */
   protected static function findUsers(array &$rule, DOMElement $element, DOMXPath $xpath) {
@@ -173,9 +176,9 @@ class XacmlParser {
    *
    * @param array $xacml
    *   The XACML rules array to be populated by this function.
-   * @param DOMDocument $dom
+   * @param \DOMDocument $dom
    *   The DOMDocument containing the XACML.
-   * @param DOMXPath $xpath
+   * @param \DOMXPath $xpath
    *   An instantianted DOMXPath class for the above DOMDomcument.
    */
   protected static function parseXacml(array &$xacml, DOMDocument $dom, DOMXPath $xpath) {

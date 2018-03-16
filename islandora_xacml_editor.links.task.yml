@@ -2,3 +2,7 @@ islandora_xacml_editor.admin:
   route_name: islandora_xacml_editor.admin
   base_route: islandora_xacml_api.admin
   title: 'Islandora XACML Editor'
+islandora_xacml_editor.manage_xacml:
+  route_name: islandora_xacml_editor.manage_xacml
+  title: Object Policy
+  parent_id: islandora.manage_overview_object

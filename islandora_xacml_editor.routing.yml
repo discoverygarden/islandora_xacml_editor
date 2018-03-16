@@ -29,3 +29,15 @@ islandora_xacml_editor.mimeautocomplete:
         type: object
   requirements:
     _permission: 'administer islandora_xacml_editor'
+islandora_xacml_editor.manage_xacml:
+  path: '/islandora/object/{object}/manage/xacml'
+  defaults:
+    _title: 'Islandora XACML Editor'
+    _form: '\Drupal\islandora_xacml_editor\Form\IslandoraXacmlEditorForm'
+  options:
+    _admin_route: TRUE
+    parameters:
+      object:
+        type: object
+  requirements:
+    _custom_access: '\Drupal\islandora_xacml_editor\Controller\DefaultController::manageAccess'

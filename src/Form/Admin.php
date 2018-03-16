@@ -47,12 +47,15 @@ class Admin extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('islandora_xacml_editor.settings');
 
+    $users = $form_state->getValue('islandora_xacml_editor_default_users');
+    $roles = $form_state->getValue('islandora_xacml_editor_default_roles');
+
     $config->set('islandora_xacml_editor_show_dsidregex', $form_state->getValue('islandora_xacml_editor_show_dsidregex'));
     $config->set('islandora_xacml_editor_show_mimeregex', $form_state->getValue('islandora_xacml_editor_show_mimeregex'));
     $config->set('islandora_xacml_editor_restricted_dsids', $form_state->getValue('islandora_xacml_editor_restricted_dsids'));
     $config->set('islandora_xacml_editor_restricted_mimes', $form_state->getValue('islandora_xacml_editor_restricted_mimes'));
-    $config->set('islandora_xacml_editor_default_users', $form_state->getValue('islandora_xacml_editor_default_users'));
-    $config->set('islandora_xacml_editor_default_roles', $form_state->getValue('islandora_xacml_editor_default_roles'));
+    $config->set('islandora_xacml_editor_default_users', array_keys($users));
+    $config->set('islandora_xacml_editor_default_roles', array_keys($roles));
 
     $config->save();
 

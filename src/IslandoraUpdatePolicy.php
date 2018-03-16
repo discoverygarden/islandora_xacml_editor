@@ -38,7 +38,7 @@ class IslandoraUpdatePolicy {
     if (isset($this->object)) {
       try {
         $xacml = new IslandoraXacml($this->object);
-        if (!isset($this->object['POLICY']) || !$xacml->managementRule->isPopulated() || $xacml->managementRule->hasPermission($user->name, $user->roles)) {
+        if (!isset($this->object['POLICY']) || !$xacml->managementRule->isPopulated() || $xacml->managementRule->hasPermission($user->getAccountName(), $user->getRoles())) {
           $success = $this->addOrUpdateAllPolicies();
         }
       }

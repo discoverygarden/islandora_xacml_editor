@@ -3,6 +3,7 @@
 namespace Drupal\islandora_xacml_editor\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 
@@ -83,6 +84,15 @@ class DefaultController extends ControllerBase {
     }
 
     return new JsonResponse($output);
+  }
+
+  /**
+   * Access callback function as to whether display the editor or not.
+   */
+  public function manageAccess($object = NULL) {
+    $object = islandora_object_load($object);
+    $perm = islandora_xacml_editor_access($object);
+    return $perm ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }

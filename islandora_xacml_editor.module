@@ -25,24 +25,7 @@ function islandora_xacml_editor_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_menu().
- */
-function islandora_xacml_editor_menu() {
-  $items = array();
-  $items['islandora/object/%islandora_object/manage/xacml'] = array(
-    'title' => 'Object Policy',
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 0,
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('islandora_xacml_editor_form', 2),
-    'access callback' => 'islandora_xacml_editor_access',
-    'access arguments' => array(2),
-    'file' => 'includes/form.inc',
-  );
-}
-
-/**
- * Access callback function as to whether display the editor or not.
+ * Function as to whether display the editor or not.
  *
  * @param AbstractObject $object
  *   A AbstractObject.
