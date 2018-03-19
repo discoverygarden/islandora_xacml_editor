@@ -122,7 +122,7 @@ function islandora_xacml_editor_apply_policy(FormStateInterface $form_state, $pa
   $parent_object = islandora_object_load($parent);
   if ((!$form_state->getValue('xacml') && $parent_object['POLICY']) ||
       ($parent_object['POLICY'] && $form_state->getValue('xacml') != 'None')) {
-    foreach ($form_state['islandora']['objects'] as $object) {
+    foreach ($form_state->get(['islandora', 'objects']) as $object) {
       islandora_xacml_editor_apply_parent_policy($object, $parent_object);
     }
   }
@@ -135,7 +135,7 @@ function islandora_xacml_editor_apply_policy(FormStateInterface $form_state, $pa
  *   The passed through form_state from hook_islandora_ingest_steps().
  */
 function islandora_xacml_editor_undo_policy(FormStateInterface $form_state) {
-  foreach ($form_state['islandora']['objects'] as $object) {
+  foreach ($form_state->get(['islandora', 'objects']) as $object) {
     if (isset($object['POLICY'])) {
       $viewable_by_user = 'isViewableByUser';
       $viewable_by_role = 'isViewableByRole';
@@ -191,7 +191,9 @@ function islandora_xacml_editor_islandora_basic_collection_build_manage_object(a
  *   The current Form State being processed.
  */
 function islandora_xacml_editor_form_islandora_basic_collection_create_child_collection_form_alter(array &$form, FormStateInterface $form_state) {
-  $parent_object = islandora_object_load($form_state['islandora']['shared_storage']['parent']);
+  $parent_object = islandora_object_load(
+    $form_state->get(['islandora', 'shared_storage', 'parent'])
+  );
 
   $xacml_options = ['None' => 'None'];
 
