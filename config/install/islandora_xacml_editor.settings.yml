@@ -1,0 +1,6 @@
+islandora_xacml_editor_restricted_dsids: ''
+islandora_xacml_editor_restricted_mimes: ''
+islandora_xacml_editor_show_dsidregex: 1
+islandora_xacml_editor_show_mimeregex: 1
+islandora_xacml_editor_default_users: []
+islandora_xacml_editor_default_roles: []

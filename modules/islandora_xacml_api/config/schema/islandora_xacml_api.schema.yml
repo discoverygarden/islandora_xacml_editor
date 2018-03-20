@@ -1,0 +1,10 @@
+islandora_xacml_api.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    islandora_xacml_api_save_relationships:
+      type: boolean
+    islandora_xacml_api_rels_viewable_role:
+      type: string
+    islandora_xacml_api_rels_viewable_user:
+      type: string

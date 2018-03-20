@@ -1,0 +1,5 @@
+islandora_xacml_api.admin:
+  route_name: islandora_xacml_api.admin
+  parent: islandora.tools_admin
+  title: 'Islandora XACML'
+  description: 'Settings for the Islandora XACML modules.'

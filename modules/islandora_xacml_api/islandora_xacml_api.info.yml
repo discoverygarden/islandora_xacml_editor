@@ -1,0 +1,8 @@
+name: 'Islandora Xacml Api'
+description: 'An API for editing XACML.'
+dependencies:
+  - :islandora
+package: 'Islandora Tools'
+core: 8.x
+php: '5.5.9'
+type: module

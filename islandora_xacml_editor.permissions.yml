@@ -1,0 +1,6 @@
+'administer islandora_xacml_editor':
+  title: 'Edit XACML Policies'
+  description: 'Can change the XACML policies on objects.'
+'administer xacml inheritance':
+  title: 'Edit XACML Inheritance'
+  description: 'Can change if XACML policies are inherited.'

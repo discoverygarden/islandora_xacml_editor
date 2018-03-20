@@ -1,0 +1,5 @@
+xacml-editor-css:
+  version: 1.x
+  css:
+    layout:
+      css/islandora_xacml_editor.css: {}
