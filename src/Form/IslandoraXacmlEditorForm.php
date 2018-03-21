@@ -1053,22 +1053,21 @@ class IslandoraXacmlEditorForm extends FormBase {
 
     // Check datastreams and mime.
     $values = $form_state->getValue('dsid_mime');
-
     $xacml->datastreamRule->clear();
     if ($form_state->getValue('dsid_mime_enabled')) {
-      if (array_key_exists('selected_mime', $form_state->get('islandora_xacml'))) {
+      if ($form_state->get(['islandora_xacml', 'selected_mime'])) {
         $xacml->datastreamRule->addMimetype($form_state->get(['islandora_xacml', 'selected_mime']));
       }
 
-      if (array_key_exists('selected_dsid', $form_state->get('islandora_xacml'))) {
+      if ($form_state->get(['islandora_xacml', 'selected_dsid'])) {
         $xacml->datastreamRule->addDsid($form_state->get(['islandora_xacml', 'selected_dsid']));
       }
 
-      if (array_key_exists('selected_mime_regexs', $form_state->get('islandora_xacml'))) {
+      if ($form_state->get(['islandora_xacml', 'selected_mime_regexs'])) {
         $xacml->datastreamRule->addMimetypeRegex($form_state->get(['islandora_xacml', 'selected_mime_regexs']));
       }
 
-      if (array_key_exists('selected_dsid_regexs', $form_state->get('islandora_xacml'))) {
+      if ($form_state->get(['islandora_xacml', 'selected_dsid_regexs'])) {
         $xacml->datastreamRule->addDsidRegex($form_state->get(['islandora_xacml', 'selected_dsid_regexs']));
       }
 
@@ -1077,17 +1076,17 @@ class IslandoraXacmlEditorForm extends FormBase {
     }
 
     // Check admin (always have this rule).
-    $values = $form_state->getValue(['manage']);
+    $values = $form_state->getValue('manage');
     $xacml->managementRule->clear();
-    if ($form_state->getValue(['manage_enabled'])) {
+    if ($form_state->getValue('manage_enabled')) {
       $xacml->managementRule->addUser($values['users']);
       $xacml->managementRule->addRole($values['roles']);
     }
 
     // Check access.
-    $values = $form_state->getValue(['access']);
+    $values = $form_state->getValue('access');
     $xacml->viewingRule->clear();
-    if ($form_state->getValue(['access_enabled'])) {
+    if ($form_state->getValue('access_enabled')) {
       $xacml->viewingRule->addUser($values['users']);
       $xacml->viewingRule->addRole($values['roles']);
     }
@@ -1096,7 +1095,7 @@ class IslandoraXacmlEditorForm extends FormBase {
 
     $form_state->setRedirect('islandora.view_object', ['object' => $pid]);
     if ($form_state->get(['islandora_xacml', 'query_choices']) !== NULL && $form_state->getValue(['update_options']) != 'newchildren') {
-      $option = $form_state->getValue(['update_options']);
+      $option = $form_state->getValue('update_options');
       $query_array = $form_state->get(
         ['islandora_xacml', 'query_choices', $option]
       );
