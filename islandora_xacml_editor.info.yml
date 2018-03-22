@@ -4,6 +4,7 @@ dependencies:
   - :islandora
   - :islandora_xacml_api
 package: 'Islandora Tools'
+configure: islandora_xacml_editor.admin
 core: 8.x
 php: '5.5.9'
 type: module
