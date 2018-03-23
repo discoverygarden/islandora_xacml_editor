@@ -3,6 +3,7 @@ description: 'An API for editing XACML.'
 dependencies:
   - :islandora
 package: 'Islandora Tools'
+configure: islandora_xacml_api.admin
 core: 8.x
 php: '5.5.9'
 type: module
