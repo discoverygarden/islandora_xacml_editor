@@ -19,7 +19,7 @@ const ISLANDORA_XACML_API_PERMIT_RULE = 'allow-everything-else';
 /**
  * Hook to update Solr queries to respect XACML rules.
  *
- * @param IslandoraSolrQueryProcessor $islandora_solr_query
+ * @param Drupal\islandora_solr\IslandoraSolrQueryProcessor $islandora_solr_query
  *   The Solr query processor to apply XACML rules to.
  */
 function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $islandora_solr_query) {
