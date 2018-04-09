@@ -5,6 +5,8 @@
  * Islandora Xacml module API functions.
  */
 
+use Drupal\islandora_solr\IslandoraSolrQueryProcessor;
+
 use Drupal\islandora_xacml_api\IslandoraXacml;
 
 // @codingStandardsIgnoreStart
@@ -17,7 +19,7 @@ const ISLANDORA_XACML_API_PERMIT_RULE = 'allow-everything-else';
 /**
  * Hook to update Solr queries to respect XACML rules.
  *
- * @param IslandoraSolrQueryProcessor $islandora_solr_query
+ * @param Drupal\islandora_solr\IslandoraSolrQueryProcessor $islandora_solr_query
  *   The Solr query processor to apply XACML rules to.
  */
 function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $islandora_solr_query) {
@@ -33,7 +35,7 @@ function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $i
   $fq = \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user') . ":\"" . $user_name . "\" OR ";
 
   // Check if any of my roles are allowed.
-  foreach ($user->getRoles as $role) {
+  foreach ($user->getRoles() as $role) {
     $fq .= \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role') . ":\"" . $role . "\" OR ";
   }
   // Check if the object is open (unrestricted).
