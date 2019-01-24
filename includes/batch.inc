@@ -24,18 +24,24 @@ use Drupal\islandora_xacml_editor\IslandoraXacmlEditorQuery;
  *   Context array used in the batch.
  */
 function islandora_xacml_editor_batch_function($xml, $pid, array $query_array, &$context) {
-  if (empty($context['sandbox'])) {
+  $sandbox = &$context['sandbox'];
+  if (!isset($sandbox['pids'])) {
     $query = new IslandoraXacmlEditorQuery($pid, $query_array);
-    $context['sandbox'] = [];
-    $context['sandbox']['progress'] = 0;
-    $context['sandbox']['pids'] = $query->getPids();
-    $context['sandbox']['items'] = count($context['sandbox']['pids']);
+    $sandbox['progress'] = 0;
+    $sandbox['pids'] = $query->getPids();
+    $sandbox['items'] = count($context['sandbox']['pids']);
     $context['results']['redirect'] = $pid;
     $context['results']['success'] = [];
     $context['results']['fail'] = [];
   }
-  $targetpid = array_pop($context['sandbox']['pids']);
-  $context['sandbox']['progress']++;
+  if ($sandbox['items'] == 0) {
+    // If no items are found exit the operation.
+    $context['finished'] = 1;
+    return;
+  }
+
+  $sandbox['progress']++;
+  $targetpid = array_pop($sandbox['pids']);
 
   $policy_update = new IslandoraUpdatePolicy($targetpid, $xml);
   $success = $policy_update->updatePolicy();
@@ -47,8 +53,7 @@ function islandora_xacml_editor_batch_function($xml, $pid, array $query_array, &
     $context['results']['fail'][] = $targetpid;
   }
 
-  // Make sure we don't divide by zero.
-  $context['finished'] = $context['sandbox']['items'] == 0 ? 1 : $context['sandbox']['progress'] / $context['sandbox']['items'];
+  $context['finished'] = $sandbox['progress'] / $sandbox['items'];
 }
 
 /**
