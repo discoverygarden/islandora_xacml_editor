@@ -15,7 +15,7 @@ use Drupal\islandora_xacml_api\IslandoraXacml;
 use AbstractObject;
 
 /**
- * Upload form when ingesting PDF objects.
+ * Collection XACML inheritance form.
  */
 class ManageXacml extends FormBase {
 
