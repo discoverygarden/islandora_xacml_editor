@@ -174,7 +174,7 @@ function islandora_xacml_editor_islandora_basic_collection_build_manage_object(a
     '#group' => 'manage_xacml_object',
     '#access' => \Drupal::currentUser()->hasPermission(ISLANDORA_XACML_EDITOR_ADMINISTER_INHERITANCE_PERMISSION),
     '#type' => 'details',
-    '#open' => TRUE,
+    '#open' => FALSE,
     '#title' => t('Manage XACML Inheritance'),
     'form' => \Drupal::formBuilder()->getForm('Drupal\islandora_xacml_editor\Form\ManageXacml', $object),
   ];
