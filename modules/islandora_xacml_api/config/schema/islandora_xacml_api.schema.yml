@@ -1,5 +1,5 @@
 islandora_xacml_api.settings:
-  type: mapping
+  type: config_object
   label: Settings
   mapping:
     islandora_xacml_api_save_relationships:

@@ -1,5 +1,5 @@
 islandora_xacml_editor.settings:
-  type: mapping
+  type: config_object
   label: Settings
   mapping:
     islandora_xacml_editor_restricted_dsids:
