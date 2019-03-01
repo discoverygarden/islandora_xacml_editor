@@ -7,10 +7,14 @@ islandora_xacml_editor.settings:
     islandora_xacml_editor_restricted_mimes:
       type: string
     islandora_xacml_editor_show_dsidregex:
-      type: integer
+      type: boolean
     islandora_xacml_editor_show_mimeregex:
-      type: integer
+      type: boolean
     islandora_xacml_editor_default_users:
       type: sequence
+      sequence:
+        type: string
     islandora_xacml_editor_default_roles:
       type: sequence
+      sequence:
+        type: string
