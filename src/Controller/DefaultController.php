@@ -6,9 +6,10 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheableMetadata;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Core\Cache\CacheableJsonResponse as JsonResponse;
 
 use Drupal\islandora_basic_collection\CollectionPolicy;
 
@@ -45,7 +46,17 @@ class DefaultController extends ControllerBase {
     foreach ($dsids as $dsid => $escaped_dsid) {
       $output[] = ['value' => $dsid, 'label' => $escaped_dsid];
     }
-    return new JsonResponse($output);
+
+    $response = new JsonResponse($output);
+
+    $response->getCacheableMetadata()
+      ->addCacheableDependency($object)
+      ->addCacheableDependency($this->config('islandora_xacml_editor.settings'))
+      ->addCacheContexts([
+        'url.query_args:q',
+      ]);
+
+    return $response;
   }
 
   /**
@@ -54,12 +65,17 @@ class DefaultController extends ControllerBase {
   public function mimeAutocomplete(AbstractObject $object, Request $request) {
     module_load_include('inc', 'islandora_xacml_editor', 'includes/autocomplete');
 
+    $cache_meta = new CacheableMetadata();
+
     $string = $request->query->get('q');
     $mimes = [];
     if ($object['COLLECTION_POLICY']) {
       $collection_policy = new CollectionPolicy($object['COLLECTION_POLICY']->content);
       $collection_models = array_keys($collection_policy->getContentModels());
       $mime = islandora_xacml_editor_retrieve_mimes($collection_models);
+      $cache_meta->addCacheTags([
+        IslandoraController::LISTING_TAG,
+      ]);
     }
     else {
       $mime = islandora_xacml_editor_retrieve_mimes($object->models);
@@ -83,7 +99,21 @@ class DefaultController extends ControllerBase {
       $output[] = ['value' => $mime, 'label' => $escaped_mime];
     }
 
-    return new JsonResponse($output);
+    $response = new JsonResponse($output);
+
+    $response->getCacheableMetadata()
+      ->addCacheableDependency($cache_meta)
+      ->addCacheableDependency($object)
+      ->addCacheableDependency($this->config('islandora_xacml_editor.settings'))
+      ->addCacheContexts([
+        'url.query_args:q',
+      ])
+      ->addCacheTags([
+        // XXX:
+        IslandoraController::LISTING_TAG,
+      ]);
+
+    return $response;
   }
 
   /**
@@ -92,7 +122,9 @@ class DefaultController extends ControllerBase {
   public function manageAccess($object = NULL) {
     $object = islandora_object_load($object);
     $perm = islandora_xacml_editor_access($object);
-    return $perm ? AccessResult::allowed() : AccessResult::forbidden();
+    return AccessResult::allowedIf($perm)
+      ->addCacheableDependency($object)
+      ->cachePerPermissions();
   }
 
 }
