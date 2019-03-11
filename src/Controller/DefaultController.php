@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Cache\CacheableJsonResponse as JsonResponse;
 
 use Drupal\islandora_basic_collection\CollectionPolicy;
+use Drupal\islandora\Controller\DefaultController as IslandoraController;
 
 use AbstractObject;
 
