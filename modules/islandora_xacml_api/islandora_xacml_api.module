@@ -28,7 +28,6 @@ function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $i
   $config = \Drupal::config('islandora_xacml_api.settings');
   $islandora_solr_query->addCacheableDependency($config);
 
-
   if ($user->id() != 0) {
     $user_name = $user->getAccountName();
     $islandora_solr_query->addCacheContexts([
