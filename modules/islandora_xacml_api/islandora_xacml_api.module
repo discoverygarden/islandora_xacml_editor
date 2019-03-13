@@ -25,21 +25,31 @@ const ISLANDORA_XACML_API_PERMIT_RULE = 'allow-everything-else';
 function islandora_xacml_api_islandora_solr_query(IslandoraSolrQueryProcessor $islandora_solr_query) {
   $user = \Drupal::currentUser();
 
+  $config = \Drupal::config('islandora_xacml_api.settings');
+  $islandora_solr_query->addCacheableDependency($config);
+
+
   if ($user->id() != 0) {
     $user_name = $user->getAccountName();
+    $islandora_solr_query->addCacheContexts([
+      'user',
+    ]);
   }
   else {
     $user_name = 'anonymous';
+    $islandora_solr_query->addCacheContexts([
+      'user.roles:anonymous',
+    ]);
   }
 
-  $fq = \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user') . ":\"" . $user_name . "\" OR ";
+  $fq = $config->get('islandora_xacml_api_rels_viewable_user') . ":\"" . $user_name . "\" OR ";
 
   // Check if any of my roles are allowed.
   foreach ($user->getRoles() as $role) {
-    $fq .= \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role') . ":\"" . $role . "\" OR ";
+    $fq .= $config->get('islandora_xacml_api_rels_viewable_role') . ":\"" . $role . "\" OR ";
   }
   // Check if the object is open (unrestricted).
-  $fq .= "((*:* -" . \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_user') . ":[* TO *]) AND (*:* -" . \Drupal::config('islandora_xacml_api.settings')->get('islandora_xacml_api_rels_viewable_role') . ":[* TO *]))";
+  $fq .= "((*:* -" . $config->get('islandora_xacml_api_rels_viewable_user') . ":[* TO *]) AND (*:* -" . $config->get('islandora_xacml_api_rels_viewable_role') . ":[* TO *]))";
   $islandora_solr_query->solrParams['fq'][] = $fq;
 }
 
