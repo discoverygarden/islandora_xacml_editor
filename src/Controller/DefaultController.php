@@ -110,7 +110,6 @@ class DefaultController extends ControllerBase {
         'url.query_args:q',
       ])
       ->addCacheTags([
-        // XXX:
         IslandoraController::LISTING_TAG,
       ]);
 
