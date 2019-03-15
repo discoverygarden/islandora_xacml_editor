@@ -203,7 +203,7 @@ function islandora_xacml_api_islandora_object_access($op, $object, $user) {
     $xacml = new IslandoraXacml($object);
 
     if (ISLANDORA_VIEW_OBJECTS == $op) {
-      return $xacml->viewingRule->hasPermission($user->id(), $user->getRoles());
+      return $xacml->viewingRule->hasPermission($user_name, $user->getRoles());
     }
     elseif (in_array($op, $management_operations) && $xacml->managementRule->isPopulated()) {
       return $xacml->managementRule->hasPermission($user_name, $user->getRoles());
