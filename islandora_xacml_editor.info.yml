@@ -6,5 +6,5 @@ dependencies:
 package: 'Islandora Tools'
 configure: islandora_xacml_editor.admin
 core: 8.x
-php: '5.5.9'
+php: '7.2'
 type: module
