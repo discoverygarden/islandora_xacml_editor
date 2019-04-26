@@ -3,3 +3,5 @@ services:
     class: \Drupal\islandora_xacml_editor\Commands\IslandoraXacmlEditorCommands
     tags:
       - { name: drush.command }
+    arguments:
+      - '@module_handler'
