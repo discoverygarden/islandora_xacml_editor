@@ -19,6 +19,8 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 class IslandoraXacmlEditorCommands extends DrushCommands {
 
   /**
+   * Module handler, for hook calls.
+   *
    * @var Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
@@ -34,13 +36,18 @@ class IslandoraXacmlEditorCommands extends DrushCommands {
    * Apply XACML policy to target object.
    *
    * @option policy
-   *   The path to an XML file containing the XACML policy configuration to be applied. It is expected that this policy file be generated from the UI's XACML Editor.
+   *   The path to an XML file containing the XACML policy configuration to be
+   *   applied. It is expected that this policy file be generated from the UI's
+   *   XACML Editor.
    * @option pid
    *   The PID of the object to apply the policy configuration to.
    * @option traversal
-   *   Optional. When enabled, the policy configuration will be applied to the target object's children (shallow traversal is not supported for collection objects). Disabled by default.
-   * @usage Apply policy.xml to 'islandora:57' and use traversal to target child objects.
-   *   drush -v --user=1 islandora_xacml_editor_apply_policy --policy=/tmp/policy.xml --pid=islandora:57 --traversal
+   *   Optional. When enabled, the policy configuration will be applied to the
+   *   target object's children (shallow traversal is not supported for
+   *   collection objects). Disabled by default.
+   * @usage drush -v --user=1 islandora_xacml_editor_apply_policy --policy=/tmp/policy.xml --pid=islandora:57 --traversal
+   *   Apply policy.xml to 'islandora:57' and use traversal to target child
+   *   objects.
    *
    * @command islandora_xacml_editor:apply-policy
    * @aliases ixeap,islandora_xacml_editor_apply_policy
@@ -50,9 +57,9 @@ class IslandoraXacmlEditorCommands extends DrushCommands {
    * @validate-module-enabled islandora_xacml_editor
    */
   public function islandoraXacmlEditorApplyPolicy(array $options = [
-    'policy' => null,
-    'pid' => null,
-    'traversal' => null,
+    'policy' => NULL,
+    'pid' => NULL,
+    'traversal' => NULL,
   ]) {
     module_load_include('inc', 'islandora', 'includes/utilities');
 
@@ -113,14 +120,16 @@ class IslandoraXacmlEditorCommands extends DrushCommands {
   }
 
   /**
-   * Force all child objects to inherit target object's XACML policy configuration.
+   * Force all child objects to inherit an object's XACML policy configuration.
    *
    * @option pid
    *   The PID of the parent object. Must have a 'POLICY' datastream.
    * @option shallow_traversal
-   *   Optional. If the target object is a collection, use shallow traversal to target only the immediate children. Disabled by default.
-   * @usage Enforce policy inheritance to all immediate children of 'islandora:root' object.
-   *   drush -v --user=1 islandora_xacml_editor_force_policy_inheritance --pid=islandora:root --shallow_traversal
+   *   Optional. If the target object is a collection, use shallow traversal to
+   *   target only the immediate children. Disabled by default.
+   * @usage drush -v --user=1 islandora_xacml_editor_force_policy_inheritance --pid=islandora:root --shallow_traversal
+   *   Enforce policy inheritance to all immediate children of 'islandora:root'
+   *   object.
    *
    * @command islandora_xacml_editor:force-policy-inheritance
    * @aliases ixefpi,islandora_xacml_editor_force_policy_inheritance
@@ -131,7 +140,7 @@ class IslandoraXacmlEditorCommands extends DrushCommands {
    */
   public function islandoraXacmlEditorForcePolicyInheritance(array $options = [
     'pid' => self::REQ,
-    'shallow_traversal' => null,
+    'shallow_traversal' => FALSE,
   ]) {
     module_load_include('inc', 'islandora', 'includes/utilities');
 
@@ -201,4 +210,5 @@ class IslandoraXacmlEditorCommands extends DrushCommands {
     batch_set($batch);
     drush_backend_batch_process();
   }
+
 }
