@@ -4,6 +4,7 @@ namespace Drupal\islandora_xacml_editor\Commands;
 
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\islandora_xacml_editor\IslandoraUpdatePolicy;
 
 /**
  * A Drush commandfile.
@@ -53,13 +54,13 @@ class IslandoraXacmlEditorCommands extends DrushCommands {
    * @aliases ixeap,islandora_xacml_editor_apply_policy
    *
    * @islandora-user-wrap
-   * @islandora-require-option pid
+   * @islandora-require-option pid,policy
    * @validate-module-enabled islandora_xacml_editor
    */
   public function islandoraXacmlEditorApplyPolicy(array $options = [
-    'policy' => NULL,
-    'pid' => NULL,
-    'traversal' => NULL,
+    'policy' => self::REQ,
+    'pid' => self::REQ,
+    'traversal' => FALSE,
   ]) {
     module_load_include('inc', 'islandora', 'includes/utilities');
 
